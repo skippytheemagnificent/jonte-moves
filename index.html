@@ -524,6 +524,41 @@
         .actions .btn { flex: 1; text-align: center; }
         
         .edit-delete { display: flex; gap: 4px; }
+
+        /* Summary Section */
+        .summary-section {
+            margin-top: 24px;
+            padding: 16px 20px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .summary-content {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .summary-content .highlight {
+            color: var(--success);
+            font-weight: 500;
+        }
+
+        .summary-content .deadline {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .summary-content .streak {
+            color: #E8D48A;
+            font-weight: 500;
+        }
+
+        .summary-content .milestone {
+            color: var(--success);
+        }
     </style>
 </head>
 <body>
@@ -565,6 +600,11 @@
     
     <div id="tasks-view" class="view active">
         <div class="container" id="app"></div>
+        <div class="container">
+            <div class="summary-section" id="summary-section">
+                <div class="summary-content" id="summary-content">Loading your progress...</div>
+            </div>
+        </div>
     </div>
     
     <div id="calendar-view" class="view">
@@ -642,7 +682,172 @@
         
         if (!data.events) data.events = [];
         
-        function save() { localStorage.setItem('moves-data', JSON.stringify(data)); }
+        function save() {
+            localStorage.setItem('moves-data', JSON.stringify(data));
+            renderSummary();
+        }
+
+        // Summary Section Logic
+        function getUpcomingDeadline() {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const upcomingEvents = data.events
+                .filter(e => {
+                    const eventDate = new Date(e.date + 'T12:00:00');
+                    return eventDate >= today;
+                })
+                .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            if (upcomingEvents.length === 0) return null;
+
+            const nextEvent = upcomingEvents[0];
+            const eventDate = new Date(nextEvent.date + 'T12:00:00');
+            const daysDiff = Math.ceil((eventDate - today) / (1000 * 60 * 60 * 24));
+
+            return {
+                title: nextEvent.title,
+                days: daysDiff,
+                date: nextEvent.date
+            };
+        }
+
+        function getRecentWins() {
+            // Get completion history from localStorage or initialize
+            let history = JSON.parse(localStorage.getItem('moves-completion-history')) || {};
+            const today = new Date().toISOString().split('T')[0];
+
+            // Count completed steps today
+            let completedToday = 0;
+            data.businesses.forEach(b => {
+                b.goals.forEach(g => {
+                    g.steps.forEach(s => {
+                        if (s.done) {
+                            // Track when step was completed (approximate based on history)
+                            const stepKey = `${b.id}-${g.id}-${s.id}`;
+                            if (!history[stepKey]) {
+                                history[stepKey] = today;
+                                completedToday++;
+                            }
+                        }
+                    });
+                });
+            });
+
+            // Clean up history for deleted steps
+            const validKeys = new Set();
+            data.businesses.forEach(b => {
+                b.goals.forEach(g => {
+                    g.steps.forEach(s => {
+                        validKeys.add(`${b.id}-${g.id}-${s.id}`);
+                    });
+                });
+            });
+
+            Object.keys(history).forEach(key => {
+                if (!validKeys.has(key)) delete history[key];
+            });
+
+            localStorage.setItem('moves-completion-history', JSON.stringify(history));
+
+            // Count completions in the last 7 days
+            const oneWeekAgo = new Date();
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+            let weeklyCompletions = 0;
+            Object.values(history).forEach(dateStr => {
+                const date = new Date(dateStr);
+                if (date >= oneWeekAgo) weeklyCompletions++;
+            });
+
+            return { today: completedToday, thisWeek: weeklyCompletions };
+        }
+
+        function getCompletionStreak() {
+            const history = JSON.parse(localStorage.getItem('moves-completion-history')) || {};
+            const dateCompletions = {};
+
+            // Count completions per date
+            Object.values(history).forEach(dateStr => {
+                dateCompletions[dateStr] = (dateCompletions[dateStr] || 0) + 1;
+            });
+
+            // Calculate streak
+            const today = new Date();
+            let streak = 0;
+            let checkDate = new Date(today);
+
+            // Check if today has completions, if not start from yesterday
+            const todayStr = today.toISOString().split('T')[0];
+            if (!dateCompletions[todayStr]) {
+                checkDate.setDate(checkDate.getDate() - 1);
+            }
+
+            while (true) {
+                const dateStr = checkDate.toISOString().split('T')[0];
+                if (dateCompletions[dateStr] && dateCompletions[dateStr] > 0) {
+                    streak++;
+                    checkDate.setDate(checkDate.getDate() - 1);
+                } else {
+                    break;
+                }
+            }
+
+            return streak;
+        }
+
+        function getTotalProgress() {
+            let totalSteps = 0;
+            let doneSteps = 0;
+
+            data.businesses.forEach(b => {
+                b.goals.forEach(g => {
+                    totalSteps += g.steps.length;
+                    doneSteps += g.steps.filter(s => s.done).length;
+                });
+            });
+
+            return { total: totalSteps, done: doneSteps, percent: totalSteps > 0 ? Math.round((doneSteps / totalSteps) * 100) : 0 };
+        }
+
+        function renderSummary() {
+            const summaryEl = document.getElementById('summary-content');
+            if (!summaryEl) return;
+
+            const parts = [];
+
+            // Upcoming deadline
+            const deadline = getUpcomingDeadline();
+            if (deadline) {
+                const dayText = deadline.days === 0 ? 'today' : deadline.days === 1 ? 'tomorrow' : `in ${deadline.days} days`;
+                parts.push(`<span class="deadline">${deadline.title}</span> ${dayText}`);
+            }
+
+            // Recent wins
+            const wins = getRecentWins();
+            if (wins.thisWeek > 0) {
+                parts.push(`Completed <span class="highlight">${wins.thisWeek} steps</span> this week ${wins.thisWeek >= 5 ? '🔥' : ''}`);
+            }
+
+            // Streak
+            const streak = getCompletionStreak();
+            if (streak > 1) {
+                parts.push(`<span class="streak">${streak}-day streak!</span> Keep it up 💪`);
+            }
+
+            // Overall progress if nothing else to show
+            if (parts.length === 0) {
+                const progress = getTotalProgress();
+                if (progress.total > 0) {
+                    parts.push(`${progress.percent}% complete — <span class="milestone">time to make some moves!</span>`);
+                } else {
+                    parts.push('Ready to crush your goals? Add some steps and get started! 🚀');
+                }
+            }
+
+            // Show 1-2 sentences max
+            summaryEl.innerHTML = parts.slice(0, 2).join(' • ');
+        }
         
         function switchTab(tab) {
             currentTab = tab;
@@ -851,6 +1056,7 @@
         // Task functions
         function render() {
             const app = document.getElementById('app');
+            if (!app) return;
             app.innerHTML = data.businesses.map(b => {
                 const totalSteps = b.goals.reduce((sum, g) => sum + g.steps.length, 0);
                 const doneSteps = b.goals.reduce((sum, g) => sum + g.steps.filter(s => s.done).length, 0);
@@ -895,8 +1101,9 @@
                     </div>
                 `;
             }).join('');
+            renderSummary();
         }
-        
+
         function toggleBusiness(id) { document.getElementById(`biz-${id}`).classList.toggle('open'); }
         
         function toggleStep(bizId, goalId, stepId) {
@@ -1094,6 +1301,7 @@
         document.getElementById('daily-affirmation').textContent = getDailyAffirmation();
 
         render();
+        renderSummary();
     </script>
 </body>
 </html>
