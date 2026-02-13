@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>MOVES</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        :root {
+            --bg: #1a1a2e;
+            --card: #16213e;
+            --accent: #e94560;
+            --accent2: #0f3460;
+            --text: #eaeaea;
+            --text-dim: #8892b0;
+            --success: #4ecca3;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 100px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+            padding: 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        header h1 {
+            font-size: 2rem;
+            font-weight: 900;
+            letter-spacing: 4px;
+        }
+        
+        header p {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-top: 4px;
+        }
+        
+        .container { padding: 16px; max-width: 600px; margin: 0 auto; }
+        
+        .business {
+            background: var(--card);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+        
+        .business-header {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .business-header h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .business-header .progress {
+            font-size: 0.8rem;
+            color: var(--success);
+        }
+        
+        .business-content {
+            padding: 0 16px 16px;
+            display: none;
+        }
+        
+        .business.open .business-content { display: block; }
+        
+        .goal {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .goal-header h3 {
+            font-size: 0.95rem;
+            color: var(--accent);
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .step:last-child { border-bottom: none; }
+        
+        .step input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            accent-color: var(--success);
+        }
+        
+        .step.done span {
+            text-decoration: line-through;
+            color: var(--text-dim);
+        }
+        
+        .btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            margin-right: 8px;
+            margin-top: 8px;
+        }
+        
+        .btn:hover { opacity: 0.9; }
+        .btn.small { padding: 4px 10px; font-size: 0.75rem; }
+        .btn.ghost { background: transparent; border: 1px solid var(--accent); }
+        .btn.danger { background: #c0392b; }
+        
+        .add-form {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .add-form input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+        
+        .add-form input::placeholder { color: var(--text-dim); }
+        
+        .fab {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(233,69,96,0.4);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal.open { display: flex; }
+        
+        .modal-content {
+            background: var(--card);
+            padding: 24px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .modal-content h2 { margin-bottom: 16px; }
+        
+        .modal-content input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            color: var(--text);
+            font-size: 1rem;
+            margin-bottom: 12px;
+        }
+        
+        .actions { display: flex; gap: 8px; }
+        .actions .btn { flex: 1; text-align: center; }
+        
+        .edit-delete { display: flex; gap: 4px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>MOVES</h1>
+        <p>Te' Moves Command Center</p>
+    </header>
+    
+    <div class="container" id="app"></div>
+    
+    <button class="fab" onclick="openAddBusiness()">+</button>
+    
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h2 id="modal-title">Add Business</h2>
+            <input type="text" id="modal-input" placeholder="Enter name...">
+            <div class="actions">
+                <button class="btn ghost" onclick="closeModal()">Cancel</button>
+                <button class="btn" id="modal-save">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let data = JSON.parse(localStorage.getItem('moves-data')) || getDefaultData();
+        let modalMode = null;
+        let modalTarget = null;
+        
+        function getDefaultData() {
+            return {
+                businesses: [
+                    { id: 1, name: "Laugh Therapy", goals: [
+                        { id: 1, name: "Murder Mystery Events", steps: [
+                            { id: 1, text: "Book venue for March event", done: false },
+                            { id: 2, text: "Write script", done: false },
+                            { id: 3, text: "Cast actors", done: false }
+                        ]},
+                        { id: 2, name: "Haha Tuesday", steps: [
+                            { id: 1, text: "Book comedians for Feb", done: false },
+                            { id: 2, text: "Promote on social media", done: false }
+                        ]},
+                        { id: 3, name: "Grant Applications", steps: [] }
+                    ]},
+                    { id: 2, name: "Plot House Productions", goals: [
+                        { id: 1, name: "Black Dads Film", steps: [
+                            { id: 1, text: "Complete first draft", done: true },
+                            { id: 2, text: "Revision pass", done: false },
+                            { id: 3, text: "Send to readers", done: false }
+                        ]}
+                    ]},
+                    { id: 3, name: "Community Passageways", goals: [
+                        { id: 1, name: "Case Management", steps: [
+                            { id: 1, text: "Weekly client check-ins", done: false },
+                            { id: 2, text: "Update Apricot notes", done: false }
+                        ]}
+                    ]},
+                    { id: 4, name: "Personal Projects", goals: [
+                        { id: 1, name: "JOJO's Adventure Book", steps: [] },
+                        { id: 2, name: "YouTube Animated Series", steps: [] }
+                    ]},
+                    { id: 5, name: "Book Publishing", goals: [
+                        { id: 1, name: "The Cookout Trivia", steps: [] },
+                        { id: 2, name: "Act Out Games", steps: [] }
+                    ]}
+                ]
+            };
+        }
+        
+        function save() {
+            localStorage.setItem('moves-data', JSON.stringify(data));
+        }
+        
+        function render() {
+            const app = document.getElementById('app');
+            app.innerHTML = data.businesses.map(b => {
+                const totalSteps = b.goals.reduce((sum, g) => sum + g.steps.length, 0);
+                const doneSteps = b.goals.reduce((sum, g) => sum + g.steps.filter(s => s.done).length, 0);
+                const progress = totalSteps > 0 ? Math.round((doneSteps / totalSteps) * 100) : 0;
+                
+                return `
+                    <div class="business" id="biz-${b.id}">
+                        <div class="business-header" onclick="toggleBusiness(${b.id})">
+                            <h2>${b.name}</h2>
+                            <span class="progress">${progress}%</span>
+                        </div>
+                        <div class="business-content">
+                            ${b.goals.map(g => {
+                                const gDone = g.steps.filter(s => s.done).length;
+                                const gTotal = g.steps.length;
+                                return `
+                                    <div class="goal">
+                                        <div class="goal-header">
+                                            <h3>${g.name} ${gTotal > 0 ? `(${gDone}/${gTotal})` : ''}</h3>
+                                            <div class="edit-delete">
+                                                <button class="btn small ghost" onclick="editGoal(${b.id}, ${g.id})">✎</button>
+                                                <button class="btn small danger" onclick="deleteGoal(${b.id}, ${g.id})">×</button>
+                                            </div>
+                                        </div>
+                                        ${g.steps.map(s => `
+                                            <div class="step ${s.done ? 'done' : ''}">
+                                                <input type="checkbox" ${s.done ? 'checked' : ''} onchange="toggleStep(${b.id}, ${g.id}, ${s.id})">
+                                                <span ondblclick="editStep(${b.id}, ${g.id}, ${s.id})">${s.text}</span>
+                                            </div>
+                                        `).join('')}
+                                        <div class="add-form">
+                                            <input type="text" placeholder="Add step..." id="step-input-${b.id}-${g.id}" onkeypress="if(event.key==='Enter')addStep(${b.id}, ${g.id})">
+                                            <button class="btn small" onclick="addStep(${b.id}, ${g.id})">+</button>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                            <button class="btn" onclick="openAddGoal(${b.id})">+ Add Goal</button>
+                            <button class="btn ghost" onclick="editBusiness(${b.id})">Edit</button>
+                            <button class="btn danger" onclick="deleteBusiness(${b.id})">Delete</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function toggleBusiness(id) {
+            document.getElementById(`biz-${id}`).classList.toggle('open');
+        }
+        
+        function toggleStep(bizId, goalId, stepId) {
+            const biz = data.businesses.find(b => b.id === bizId);
+            const goal = biz.goals.find(g => g.id === goalId);
+            const step = goal.steps.find(s => s.id === stepId);
+            step.done = !step.done;
+            save();
+            render();
+        }
+        
+        function addStep(bizId, goalId) {
+            const input = document.getElementById(`step-input-${bizId}-${goalId}`);
+            if (!input.value.trim()) return;
+            const biz = data.businesses.find(b => b.id === bizId);
+            const goal = biz.goals.find(g => g.id === goalId);
+            const newId = goal.steps.length > 0 ? Math.max(...goal.steps.map(s => s.id)) + 1 : 1;
+            goal.steps.push({ id: newId, text: input.value.trim(), done: false });
+            input.value = '';
+            save();
+            render();
+        }
+        
+        function openAddBusiness() {
+            modalMode = 'add-business';
+            document.getElementById('modal-title').textContent = 'Add Business';
+            document.getElementById('modal-input').value = '';
+            document.getElementById('modal').classList.add('open');
+            document.getElementById('modal-input').focus();
+        }
+        
+        function openAddGoal(bizId) {
+            modalMode = 'add-goal';
+            modalTarget = bizId;
+            document.getElementById('modal-title').textContent = 'Add Goal';
+            document.getElementById('modal-input').value = '';
+            document.getElementById('modal').classList.add('open');
+            document.getElementById('modal-input').focus();
+        }
+        
+        function editBusiness(id) {
+            const biz = data.businesses.find(b => b.id === id);
+            modalMode = 'edit-business';
+            modalTarget = id;
+            document.getElementById('modal-title').textContent = 'Edit Business';
+            document.getElementById('modal-input').value = biz.name;
+            document.getElementById('modal').classList.add('open');
+            document.getElementById('modal-input').focus();
+        }
+        
+        function editGoal(bizId, goalId) {
+            const biz = data.businesses.find(b => b.id === bizId);
+            const goal = biz.goals.find(g => g.id === goalId);
+            modalMode = 'edit-goal';
+            modalTarget = { bizId, goalId };
+            document.getElementById('modal-title').textContent = 'Edit Goal';
+            document.getElementById('modal-input').value = goal.name;
+            document.getElementById('modal').classList.add('open');
+            document.getElementById('modal-input').focus();
+        }
+        
+        function editStep(bizId, goalId, stepId) {
+            const biz = data.businesses.find(b => b.id === bizId);
+            const goal = biz.goals.find(g => g.id === goalId);
+            const step = goal.steps.find(s => s.id === stepId);
+            const newText = prompt('Edit step:', step.text);
+            if (newText && newText.trim()) {
+                step.text = newText.trim();
+                save();
+                render();
+            }
+        }
+        
+        function deleteBusiness(id) {
+            if (confirm('Delete this business and all its goals?')) {
+                data.businesses = data.businesses.filter(b => b.id !== id);
+                save();
+                render();
+            }
+        }
+        
+        function deleteGoal(bizId, goalId) {
+            if (confirm('Delete this goal and all its steps?')) {
+                const biz = data.businesses.find(b => b.id === bizId);
+                biz.goals = biz.goals.filter(g => g.id !== goalId);
+                save();
+                render();
+            }
+        }
+        
+        function closeModal() {
+            document.getElementById('modal').classList.remove('open');
+            modalMode = null;
+            modalTarget = null;
+        }
+        
+        document.getElementById('modal-save').onclick = function() {
+            const value = document.getElementById('modal-input').value.trim();
+            if (!value) return;
+            
+            if (modalMode === 'add-business') {
+                const newId = data.businesses.length > 0 ? Math.max(...data.businesses.map(b => b.id)) + 1 : 1;
+                data.businesses.push({ id: newId, name: value, goals: [] });
+            } else if (modalMode === 'add-goal') {
+                const biz = data.businesses.find(b => b.id === modalTarget);
+                const newId = biz.goals.length > 0 ? Math.max(...biz.goals.map(g => g.id)) + 1 : 1;
+                biz.goals.push({ id: newId, name: value, steps: [] });
+            } else if (modalMode === 'edit-business') {
+                const biz = data.businesses.find(b => b.id === modalTarget);
+                biz.name = value;
+            } else if (modalMode === 'edit-goal') {
+                const biz = data.businesses.find(b => b.id === modalTarget.bizId);
+                const goal = biz.goals.find(g => g.id === modalTarget.goalId);
+                goal.name = value;
+            }
+            
+            save();
+            render();
+            closeModal();
+        };
+        
+        document.getElementById('modal-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') document.getElementById('modal-save').click();
+        });
+        
+        render();
+    </script>
+</body>
+</html>
