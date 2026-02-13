@@ -528,36 +528,258 @@
         /* Summary Section */
         .summary-section {
             margin-top: 24px;
-            padding: 16px 20px;
+            padding: 20px 24px;
             background: rgba(255,255,255,0.03);
             border-radius: 12px;
             border: 1px solid rgba(255,255,255,0.05);
+            perspective: 1000px;
+            min-height: 100px;
         }
 
-        .summary-content {
-            font-size: 0.85rem;
-            color: var(--text-dim);
-            line-height: 1.5;
+        .coach-flip-container {
+            position: relative;
+            width: 100%;
+            height: 60px;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .coach-flip-container.flipped {
+            transform: rotateX(180deg);
+        }
+
+        .coach-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             text-align: center;
         }
 
-        .summary-content .highlight {
-            color: var(--success);
+        .coach-face.direction {
+            transform: rotateX(180deg);
+        }
+
+        .coach-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-dim);
+            margin-bottom: 6px;
+            opacity: 0.7;
+        }
+
+        .coach-message {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            max-width: 500px;
+        }
+
+        .coach-face.motivation .coach-message {
+            font-family: 'Georgia', 'Didot', serif;
+            font-style: italic;
+            color: #E8D48A;
+            text-shadow: 0 0 20px rgba(232, 212, 138, 0.3);
+        }
+
+        .coach-face.direction .coach-message {
+            color: var(--text);
             font-weight: 500;
         }
 
-        .summary-content .deadline {
+        .coach-highlight {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .coach-urgent {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .coach-gold {
+            color: #E8D48A;
+            font-weight: 600;
+        }
+
+        /* Today's Focus Section */
+        .focus-section {
+            margin: 0 16px 16px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .focus-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, rgba(233, 69, 96, 0.15) 0%, rgba(15, 52, 96, 0.4) 100%);
+            border-radius: 12px 12px 0 0;
+            border: 1px solid rgba(233, 69, 96, 0.3);
+            border-bottom: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .focus-header:hover {
+            background: linear-gradient(135deg, rgba(233, 69, 96, 0.2) 0%, rgba(15, 52, 96, 0.5) 100%);
+        }
+
+        .focus-header.collapsed {
+            border-radius: 12px;
+            border-bottom: 1px solid rgba(233, 69, 96, 0.3);
+        }
+
+        .focus-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent);
+            letter-spacing: 0.5px;
+        }
+
+        .focus-title-icon {
+            font-size: 1.2rem;
+        }
+
+        .focus-toggle {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            transition: transform 0.2s;
+        }
+
+        .focus-header.collapsed .focus-toggle {
+            transform: rotate(-90deg);
+        }
+
+        .focus-content {
+            background: linear-gradient(180deg, rgba(15, 52, 96, 0.3) 0%, rgba(22, 33, 62, 0.6) 100%);
+            border-radius: 0 0 12px 12px;
+            border: 1px solid rgba(233, 69, 96, 0.2);
+            border-top: none;
+            padding: 16px 20px;
+            display: block;
+        }
+
+        .focus-content.collapsed {
+            display: none;
+        }
+
+        .focus-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .focus-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .focus-item:first-child {
+            padding-top: 0;
+        }
+
+        .focus-number {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent) 0%, #ff6b6b 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(233, 69, 96, 0.4);
+        }
+
+        .focus-item:nth-child(2) .focus-number {
+            background: linear-gradient(135deg, #e8a93f 0%, #e8d48a 100%);
+            box-shadow: 0 2px 8px rgba(232, 169, 63, 0.4);
+        }
+
+        .focus-item:nth-child(3) .focus-number {
+            background: linear-gradient(135deg, #4ecca3 0%, #5dd9b0 100%);
+            box-shadow: 0 2px 8px rgba(78, 204, 163, 0.4);
+        }
+
+        .focus-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .focus-task {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .focus-project {
+            font-size: 0.8rem;
             color: var(--accent);
             font-weight: 500;
+            margin-bottom: 6px;
         }
 
-        .summary-content .streak {
-            color: #E8D48A;
+        .focus-reason {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        .focus-reason-icon {
+            font-size: 0.9rem;
+        }
+
+        .focus-reason.overdue {
+            color: #ff6b6b;
             font-weight: 500;
         }
 
-        .summary-content .milestone {
-            color: var(--success);
+        .focus-reason.urgent {
+            color: #e8a93f;
+            font-weight: 500;
+        }
+
+        .focus-reason.blocking {
+            color: #6bb5ff;
+        }
+
+        .focus-reason.stalled {
+            color: #b8a0ff;
+        }
+
+        .focus-reason.quickwin {
+            color: #4ecca3;
+        }
+
+        .focus-empty {
+            text-align: center;
+            padding: 24px 16px;
+            color: var(--text-dim);
+            font-style: italic;
+            line-height: 1.5;
+        }
+
+        .focus-empty-icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+            display: block;
         }
     </style>
 </head>
@@ -599,10 +821,32 @@
     </div>
     
     <div id="tasks-view" class="view active">
+        <!-- Today's Focus Section -->
+        <div class="focus-section" id="focus-section">
+            <div class="focus-header" onclick="toggleFocus()">
+                <div class="focus-title">
+                    <span class="focus-title-icon">📍</span>
+                    TODAY'S FOCUS
+                </div>
+                <span class="focus-toggle" id="focus-toggle">▼</span>
+            </div>
+            <div class="focus-content" id="focus-content">
+                <div id="focus-list">Loading priorities...</div>
+            </div>
+        </div>
         <div class="container" id="app"></div>
         <div class="container">
             <div class="summary-section" id="summary-section">
-                <div class="summary-content" id="summary-content">Loading your progress...</div>
+                <div class="coach-flip-container" id="coach-flip-container">
+                    <div class="coach-face motivation">
+                        <div class="coach-label">Daily Motivation</div>
+                        <div class="coach-message" id="motivation-message">You're building something that matters. Keep stacking.</div>
+                    </div>
+                    <div class="coach-face direction">
+                        <div class="coach-label">Today's Direction</div>
+                        <div class="coach-message" id="direction-message">Loading your next move...</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -684,7 +928,162 @@
         
         function save() {
             localStorage.setItem('moves-data', JSON.stringify(data));
-            renderSummary();
+            // Refresh direction message without restarting the flip interval
+            document.getElementById('direction-message').innerHTML = getDirectionMessage();
+        }
+
+        // Coach Section - Motivation & Direction Flip
+        const motivationMessages = [
+            "You're building something that matters. Keep stacking.",
+            "This is how empires start. One step at a time.",
+            "You've got the vision. Now execute.",
+            "I am a money magnet. Wealth flows to me effortlessly.",
+            "I think like a CEO. I move like a boss.",
+            "My ideas are worth millions. My execution is priceless.",
+            "I don't chase. I attract.",
+            "Winners don't wait. Winners execute.",
+            "I am building an empire, one move at a time.",
+            "Abundance is my birthright. Success is my reality.",
+            "Every decision I make multiplies my wealth.",
+            "I am the architect of my own fortune.",
+            "Money works for me while I sleep. That's boss thinking.",
+            "I turn obstacles into opportunities. That's the millionaire mindset.",
+            "My vision is clear. My moves are calculated. My success is inevitable.",
+            "I create value and wealth follows.",
+            "Fear is temporary. Regret is forever. I choose action.",
+            "I am not lucky. I am prepared, focused, and relentless.",
+            "My time is valuable. I invest it wisely.",
+            "I don't ask for permission to be great. I just am.",
+            "Every day is a new opportunity to level up.",
+            "I think big, act bold, and win always.",
+            "My potential is unlimited. My grind is unmatched.",
+            "I build generational wealth starting today.",
+            "I am the main character in my success story.",
+            "Comfort zones are for the average. I am exceptional.",
+            "I see what others don't. I do what others won't.",
+            "Success is not an option. It's the only destination."
+        ];
+
+        function getDailyMotivation() {
+            const today = new Date();
+            const dateNumber = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+            const index = dateNumber % motivationMessages.length;
+            return motivationMessages[index];
+        }
+
+        function getDirectionMessage() {
+            const directions = [];
+
+            // 1. Check for stalled goals (goals with no progress)
+            const stalledGoals = [];
+            data.businesses.forEach(b => {
+                b.goals.forEach(g => {
+                    if (g.steps.length > 0) {
+                        const doneCount = g.steps.filter(s => s.done).length;
+                        if (doneCount === 0) {
+                            stalledGoals.push({ business: b.name, goal: g.name, steps: g.steps });
+                        }
+                    }
+                });
+            });
+
+            if (stalledGoals.length > 0) {
+                const sg = stalledGoals[0];
+                directions.push(`Start with <span class="coach-highlight">${sg.goal}</span> — tackle "${sg.steps[0].text}" today`);
+            }
+
+            // 2. Check for upcoming deadlines
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const upcomingEvents = data.events
+                .filter(e => {
+                    const eventDate = new Date(e.date + 'T12:00:00');
+                    const daysDiff = Math.ceil((eventDate - today) / (1000 * 60 * 60 * 24));
+                    return daysDiff >= 0 && daysDiff <= 3;
+                })
+                .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            if (upcomingEvents.length > 0) {
+                const event = upcomingEvents[0];
+                const eventDate = new Date(event.date + 'T12:00:00');
+                const daysDiff = Math.ceil((eventDate - today) / (1000 * 60 * 60 * 24));
+                const dayText = daysDiff === 0 ? 'today' : daysDiff === 1 ? 'tomorrow' : `in ${daysDiff} days`;
+                directions.push(`<span class="coach-urgent">${event.title}</span> is ${dayText} — prep time`);
+            }
+
+            // 3. Check for imbalance (one business getting all attention)
+            const bizActivity = {};
+            const history = JSON.parse(localStorage.getItem('moves-completion-history')) || {};
+            const oneWeekAgo = new Date();
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+            Object.values(history).forEach(entry => {
+                if (typeof entry === 'object' && entry.date) {
+                    const date = new Date(entry.date);
+                    if (date >= oneWeekAgo && entry.businessName) {
+                        bizActivity[entry.businessName] = (bizActivity[entry.businessName] || 0) + 1;
+                    }
+                }
+            });
+
+            const activeBizs = Object.keys(bizActivity);
+            if (activeBizs.length === 1 && data.businesses.length > 1) {
+                const neglected = data.businesses.find(b => b.name !== activeBizs[0]);
+                if (neglected && neglected.goals.some(g => g.steps.length > 0 && g.steps.some(s => !s.done))) {
+                    directions.push(`Give <span class="coach-gold">${neglected.name}</span> some attention today`);
+                }
+            }
+
+            // 4. Check completion streak
+            const streak = getCompletionStreak();
+            if (streak >= 3) {
+                directions.push(`You're on a <span class="coach-gold">${streak}-day streak</span>! Keep the momentum`);
+            }
+
+            // 5. Next action from any incomplete goal
+            if (directions.length === 0) {
+                for (const b of data.businesses) {
+                    for (const g of b.goals) {
+                        const nextStep = g.steps.find(s => !s.done);
+                        if (nextStep) {
+                            directions.push(`Next up: <span class="coach-highlight">${nextStep.text}</span>`);
+                            break;
+                        }
+                    }
+                    if (directions.length > 0) break;
+                }
+            }
+
+            // 6. Default message
+            if (directions.length === 0) {
+                const totalSteps = data.businesses.reduce((sum, b) => sum + b.goals.reduce((gSum, g) => gSum + g.steps.length, 0), 0);
+                if (totalSteps === 0) {
+                    directions.push('Add some goals and steps to get your direction 🎯');
+                } else {
+                    directions.push('All caught up! Time to set new targets 🚀');
+                }
+            }
+
+            return directions[0];
+        }
+
+        let coachFlipInterval;
+        let isShowingMotivation = true;
+
+        function startCoachFlip() {
+            // Update messages
+            document.getElementById('motivation-message').innerHTML = getDailyMotivation();
+            document.getElementById('direction-message').innerHTML = getDirectionMessage();
+
+            // Clear existing interval if any
+            if (coachFlipInterval) clearInterval(coachFlipInterval);
+
+            // Start the flip animation
+            coachFlipInterval = setInterval(() => {
+                const container = document.getElementById('coach-flip-container');
+                isShowingMotivation = !isShowingMotivation;
+                container.classList.toggle('flipped', !isShowingMotivation);
+            }, 5000);
         }
 
         // Summary Section Logic
@@ -828,71 +1227,8 @@
         }
 
         function renderSummary() {
-            const summaryEl = document.getElementById('summary-content');
-            if (!summaryEl) return;
-
-            const parts = [];
-
-            // Upcoming deadline
-            const deadline = getUpcomingDeadline();
-            if (deadline) {
-                const dayText = deadline.days === 0 ? 'today' : deadline.days === 1 ? 'tomorrow' : `in ${deadline.days} days`;
-                parts.push(`<span class="deadline">${deadline.title}</span> ${dayText}`);
-            }
-
-            // Recent wins with contextual breakdown
-            const wins = getRecentWins();
-            if (wins.thisWeek > 0) {
-                const fireEmoji = wins.thisWeek >= 5 ? ' 🔥' : '';
-
-                // Build contextual summary: "3 in Laugh Therapy, 2 in Plot House"
-                const breakdownParts = [];
-                const bizNames = Object.keys(wins.breakdown);
-
-                if (bizNames.length === 0) {
-                    // Fallback to simple count if no breakdown data yet
-                    parts.push(`Completed <span class="highlight">${wins.thisWeek} steps</span> this week${fireEmoji}`);
-                } else if (bizNames.length === 1) {
-                    // Single business - show business name and goal breakdown
-                    const bizName = bizNames[0];
-                    const goals = wins.breakdown[bizName];
-                    const goalEntries = Object.entries(goals);
-                    const bizTotal = goalEntries.reduce((sum, [, count]) => sum + count, 0);
-
-                    if (goalEntries.length === 1) {
-                        parts.push(`This week: <span class="highlight">${bizTotal} in ${bizName}</span> (${goalEntries[0][0]})${fireEmoji}`);
-                    } else {
-                        parts.push(`This week: <span class="highlight">${bizTotal} in ${bizName}</span>${fireEmoji}`);
-                    }
-                } else {
-                    // Multiple businesses - show count per business
-                    const breakdownText = bizNames.map(biz => {
-                        const goals = wins.breakdown[biz];
-                        const bizTotal = Object.values(goals).reduce((sum, count) => sum + count, 0);
-                        return `${bizTotal} in ${biz}`;
-                    }).join(', ');
-                    parts.push(`This week: <span class="highlight">${breakdownText}</span>${fireEmoji}`);
-                }
-            }
-
-            // Streak
-            const streak = getCompletionStreak();
-            if (streak > 1) {
-                parts.push(`<span class="streak">${streak}-day streak!</span> Keep it up 💪`);
-            }
-
-            // Overall progress if nothing else to show
-            if (parts.length === 0) {
-                const progress = getTotalProgress();
-                if (progress.total > 0) {
-                    parts.push(`${progress.percent}% complete — <span class="milestone">time to make some moves!</span>`);
-                } else {
-                    parts.push('Ready to crush your goals? Add some steps and get started! 🚀');
-                }
-            }
-
-            // Show 1-2 sentences max
-            summaryEl.innerHTML = parts.slice(0, 2).join(' • ');
+            // Start the coach flip animation with fresh data
+            startCoachFlip();
         }
         
         function switchTab(tab) {
