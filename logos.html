@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOVES Logo Options</title>
+    <style>
+        body { background: #0a0a0a; color: white; font-family: -apple-system, sans-serif; padding: 20px; }
+        h1 { text-align: center; margin-bottom: 40px; }
+        .logo-option { background: #1a1a2e; border-radius: 12px; padding: 30px; margin-bottom: 30px; text-align: center; }
+        .logo-option h2 { color: #ff006e; margin-bottom: 10px; }
+        .logo-option p { color: #888; font-size: 14px; margin-bottom: 20px; }
+        svg { max-width: 100%; height: auto; }
+    </style>
+</head>
+<body>
+    <h1>MOVES Logo Options</h1>
+    
+    <div class="logo-option">
+        <h2>V2 - Angular Chrome</h2>
+        <p>Angular M, holographic gradient, speed streaks, luxury corner cut</p>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200">
+            <defs>
+                <linearGradient id="chrome" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#c0c0c0"/>
+                    <stop offset="25%" style="stop-color:#ff006e"/>
+                    <stop offset="50%" style="stop-color:#00f5ff"/>
+                    <stop offset="75%" style="stop-color:#ff006e"/>
+                    <stop offset="100%" style="stop-color:#c0c0c0"/>
+                </linearGradient>
+                <filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                <linearGradient id="techGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#000000"/>
+                    <stop offset="50%" style="stop-color:#1a1a2e"/>
+                    <stop offset="100%" style="stop-color:#000000"/>
+                </linearGradient>
+            </defs>
+            <polygon points="20,180 180,180 180,20 40,20" fill="url(#techGrad)" />
+            <path d="M50 150 L50 70 L75 110 L100 70 L100 150" stroke="url(#chrome)" stroke-width="8" fill="none" stroke-linecap="square" filter="url(#glow)"/>
+            <line x1="115" y1="70" x2="170" y2="70" stroke="#00f5ff" stroke-width="3" opacity="0.9"/>
+            <line x1="125" y1="90" x2="180" y2="90" stroke="#ff006e" stroke-width="3" opacity="0.7"/>
+            <line x1="115" y1="110" x2="160" y2="110" stroke="#00f5ff" stroke-width="3" opacity="0.5"/>
+            <polygon points="20,20 40,20 20,40" fill="#ff006e"/>
+            <line x1="20" y1="175" x2="180" y2="175" stroke="url(#chrome)" stroke-width="2"/>
+        </svg>
+    </div>
+    
+    <div class="logo-option">
+        <h2>V3 - Neon Cyber</h2>
+        <p>Circular frame, neon pink/cyan glow, geometric M, tech grid accents</p>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200">
+            <defs>
+                <filter id="neonPink2"><feGaussianBlur stdDeviation="4" result="blur"/><feFlood flood-color="#ff006e" result="color"/><feComposite in="color" in2="blur" operator="in" result="shadow"/><feMerge><feMergeNode in="shadow"/><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                <filter id="neonCyan2"><feGaussianBlur stdDeviation="3" result="blur"/><feFlood flood-color="#00f5ff" result="color"/><feComposite in="color" in2="blur" operator="in" result="shadow"/><feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            </defs>
+            <rect width="200" height="200" fill="#000"/>
+            <circle cx="100" cy="100" r="85" fill="none" stroke="#1a1a2e" stroke-width="12"/>
+            <path d="M100 15 A85 85 0 0 1 185 100" fill="none" stroke="#ff006e" stroke-width="3" filter="url(#neonPink2)"/>
+            <g filter="url(#neonCyan2)">
+                <path d="M55 140 L55 75 L100 120 L100 60" stroke="#00f5ff" stroke-width="5" fill="none" stroke-linecap="round"/>
+                <path d="M100 60 L100 120 L145 75 L145 140" stroke="#00f5ff" stroke-width="5" fill="none" stroke-linecap="round"/>
+            </g>
+            <circle cx="100" cy="60" r="6" fill="#ff006e" filter="url(#neonPink2)"/>
+            <line x1="30" y1="100" x2="45" y2="100" stroke="#333" stroke-width="1"/>
+            <line x1="155" y1="100" x2="170" y2="100" stroke="#333" stroke-width="1"/>
+            <line x1="100" y1="30" x2="100" y2="45" stroke="#333" stroke-width="1"/>
+            <line x1="100" y1="155" x2="100" y2="170" stroke="#333" stroke-width="1"/>
+        </svg>
+    </div>
+    
+    <div class="logo-option">
+        <h2>V4 - Streetwear Type</h2>
+        <p>Bold condensed typography, gold gradient, ice blue accent, clean luxury</p>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 120" width="300">
+            <defs>
+                <linearGradient id="luxuryGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#c9b037"/>
+                    <stop offset="50%" style="stop-color:#f4e5b0"/>
+                    <stop offset="100%" style="stop-color:#c9b037"/>
+                </linearGradient>
+                <linearGradient id="iceGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#00f5ff"/>
+                    <stop offset="100%" style="stop-color:#0066ff"/>
+                </linearGradient>
+                <filter id="shadow2"><feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#000" flood-opacity="0.5"/></filter>
+            </defs>
+            <rect width="300" height="120" fill="#0a0a0a"/>
+            <text x="150" y="85" font-family="Impact, Haettenschweiler, Arial Black, sans-serif" font-size="72" font-weight="900" letter-spacing="-2" text-anchor="middle" fill="url(#luxuryGrad2)" filter="url(#shadow2)">MOVES</text>
+            <rect x="40" y="95" width="220" height="4" fill="url(#iceGrad2)"/>
+            <rect x="40" y="20" width="30" height="3" fill="#ff006e"/>
+            <rect x="230" y="20" width="30" height="3" fill="#ff006e"/>
+            <text x="150" y="112" font-family="Helvetica, Arial, sans-serif" font-size="8" letter-spacing="6" text-anchor="middle" fill="#666">COMMAND CENTER</text>
+        </svg>
+    </div>
+</body>
+</html>
