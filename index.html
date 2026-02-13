@@ -31,36 +31,19 @@
         }
         
         header {
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
-            padding: 16px 20px;
+            background: #0a0a0a;
+            padding: 12px 20px;
             text-align: center;
             position: sticky;
             top: 0;
             z-index: 100;
+            border-bottom: 1px solid rgba(201, 162, 39, 0.3);
         }
         
         .logo-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-        }
-        
-        .logo {
-            width: 44px;
-            height: 44px;
-        }
-        
-        header h1 {
-            font-size: 1.8rem;
-            font-weight: 900;
-            letter-spacing: 4px;
-        }
-        
-        header p {
-            font-size: 0.75rem;
-            opacity: 0.8;
-            margin-top: 2px;
         }
         
         .tabs {
@@ -433,21 +416,7 @@
 <body>
     <header>
         <div class="logo-container">
-            <svg class="logo" viewBox="0 0 100 100">
-                <defs>
-                    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" style="stop-color:#e94560"/>
-                        <stop offset="100%" style="stop-color:#0f3460"/>
-                    </linearGradient>
-                </defs>
-                <circle cx="50" cy="50" r="45" fill="url(#logoGrad)"/>
-                <path d="M25 50 L40 65 L75 30" stroke="white" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="75" cy="30" r="8" fill="#4ecca3"/>
-            </svg>
-            <div>
-                <h1>MOVES</h1>
-                <p>Te' Moves Command Center</p>
-            </div>
+            <img src="logo.jpg" alt="MOVES" class="logo" style="width: 70px; height: auto; border-radius: 8px;">
         </div>
     </header>
     
