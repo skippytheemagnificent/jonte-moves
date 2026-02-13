@@ -8,6 +8,7 @@
     <meta name="theme-color" content="#1a1a2e">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23e94560'/%3E%3Cpath d='M30 55 L45 70 L70 35' stroke='white' stroke-width='8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
@@ -31,27 +32,254 @@
         
         header {
             background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
-            padding: 20px;
+            padding: 16px 20px;
             text-align: center;
             position: sticky;
             top: 0;
             z-index: 100;
         }
         
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .logo {
+            width: 44px;
+            height: 44px;
+        }
+        
         header h1 {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 900;
             letter-spacing: 4px;
         }
         
         header p {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             opacity: 0.8;
-            margin-top: 4px;
+            margin-top: 2px;
         }
+        
+        .tabs {
+            display: flex;
+            background: var(--card);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 14px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-dim);
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+        
+        .tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+        
+        .view { display: none; }
+        .view.active { display: block; }
         
         .container { padding: 16px; max-width: 600px; margin: 0 auto; }
         
+        /* Calendar Styles */
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .calendar-nav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .calendar-nav button {
+            background: var(--accent2);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        
+        .calendar-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .view-toggle {
+            display: flex;
+            gap: 4px;
+        }
+        
+        .view-toggle button {
+            background: var(--card);
+            border: 1px solid var(--accent2);
+            color: var(--text-dim);
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.7rem;
+        }
+        
+        .view-toggle button.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
+        
+        .calendar-grid {
+            background: var(--card);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            background: var(--accent2);
+        }
+        
+        .weekday {
+            padding: 10px;
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-dim);
+        }
+        
+        .days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+        
+        .day {
+            aspect-ratio: 1;
+            padding: 4px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .day:hover { background: rgba(255,255,255,0.05); }
+        .day.other-month { color: var(--text-dim); opacity: 0.4; }
+        .day.today { background: var(--accent2); }
+        .day.today .day-num { color: var(--accent); font-weight: bold; }
+        .day.selected { background: var(--accent); }
+        
+        .day-num { font-size: 0.85rem; margin-bottom: 2px; }
+        
+        .day-events {
+            display: flex;
+            gap: 2px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .event-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+        
+        /* Daily/Weekly View */
+        .schedule {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 16px;
+        }
+        
+        .schedule-day {
+            margin-bottom: 16px;
+        }
+        
+        .schedule-day-header {
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .schedule-day-header.today { color: var(--success); }
+        
+        .event {
+            background: rgba(255,255,255,0.05);
+            border-left: 3px solid var(--accent);
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            border-radius: 0 6px 6px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .event-title { font-size: 0.9rem; }
+        .event-time { font-size: 0.75rem; color: var(--text-dim); }
+        
+        .no-events {
+            color: var(--text-dim);
+            font-style: italic;
+            font-size: 0.85rem;
+        }
+        
+        /* Annual View */
+        .annual-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        
+        .mini-month {
+            background: var(--card);
+            border-radius: 8px;
+            padding: 10px;
+        }
+        
+        .mini-month-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--accent);
+        }
+        
+        .mini-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            font-size: 0.6rem;
+        }
+        
+        .mini-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 2px;
+        }
+        
+        .mini-day.has-event { background: var(--success); color: var(--bg); }
+        .mini-day.today { background: var(--accent); color: white; }
+        
+        /* Business/Task Styles */
         .business {
             background: var(--card);
             border-radius: 12px;
@@ -68,21 +296,10 @@
             border-left: 4px solid var(--accent);
         }
         
-        .business-header h2 {
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
+        .business-header h2 { font-size: 1.1rem; font-weight: 600; }
+        .business-header .progress { font-size: 0.8rem; color: var(--success); }
         
-        .business-header .progress {
-            font-size: 0.8rem;
-            color: var(--success);
-        }
-        
-        .business-content {
-            padding: 0 16px 16px;
-            display: none;
-        }
-        
+        .business-content { padding: 0 16px 16px; display: none; }
         .business.open .business-content { display: block; }
         
         .goal {
@@ -99,10 +316,7 @@
             margin-bottom: 8px;
         }
         
-        .goal-header h3 {
-            font-size: 0.95rem;
-            color: var(--accent);
-        }
+        .goal-header h3 { font-size: 0.95rem; color: var(--accent); }
         
         .step {
             display: flex;
@@ -120,10 +334,7 @@
             accent-color: var(--success);
         }
         
-        .step.done span {
-            text-decoration: line-through;
-            color: var(--text-dim);
-        }
+        .step.done span { text-decoration: line-through; color: var(--text-dim); }
         
         .btn {
             background: var(--accent);
@@ -142,13 +353,9 @@
         .btn.ghost { background: transparent; border: 1px solid var(--accent); }
         .btn.danger { background: #c0392b; }
         
-        .add-form {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-        }
+        .add-form { display: flex; gap: 8px; margin-top: 12px; }
         
-        .add-form input {
+        .add-form input, .event-form input {
             flex: 1;
             padding: 10px;
             border: none;
@@ -158,7 +365,7 @@
             font-size: 0.9rem;
         }
         
-        .add-form input::placeholder { color: var(--text-dim); }
+        .add-form input::placeholder, .event-form input::placeholder { color: var(--text-dim); }
         
         .fab {
             position: fixed;
@@ -173,6 +380,7 @@
             font-size: 2rem;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(233,69,96,0.4);
+            z-index: 50;
         }
         
         .modal {
@@ -198,7 +406,7 @@
         
         .modal-content h2 { margin-bottom: 16px; }
         
-        .modal-content input {
+        .modal-content input, .modal-content select {
             width: 100%;
             padding: 12px;
             border: none;
@@ -209,6 +417,13 @@
             margin-bottom: 12px;
         }
         
+        .modal-content label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-bottom: 4px;
+        }
+        
         .actions { display: flex; gap: 8px; }
         .actions .btn { flex: 1; text-align: center; }
         
@@ -217,29 +432,65 @@
 </head>
 <body>
     <header>
-        <h1>MOVES</h1>
-        <p>Te' Moves Command Center</p>
-    </header>
-    
-    <div class="container" id="app"></div>
-    
-    <button class="fab" onclick="openAddBusiness()">+</button>
-    
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <h2 id="modal-title">Add Business</h2>
-            <input type="text" id="modal-input" placeholder="Enter name...">
-            <div class="actions">
-                <button class="btn ghost" onclick="closeModal()">Cancel</button>
-                <button class="btn" id="modal-save">Save</button>
+        <div class="logo-container">
+            <svg class="logo" viewBox="0 0 100 100">
+                <defs>
+                    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#e94560"/>
+                        <stop offset="100%" style="stop-color:#0f3460"/>
+                    </linearGradient>
+                </defs>
+                <circle cx="50" cy="50" r="45" fill="url(#logoGrad)"/>
+                <path d="M25 50 L40 65 L75 30" stroke="white" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="75" cy="30" r="8" fill="#4ecca3"/>
+            </svg>
+            <div>
+                <h1>MOVES</h1>
+                <p>Te' Moves Command Center</p>
             </div>
         </div>
+    </header>
+    
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('tasks')">Tasks</div>
+        <div class="tab" onclick="switchTab('calendar')">Calendar</div>
+    </div>
+    
+    <div id="tasks-view" class="view active">
+        <div class="container" id="app"></div>
+    </div>
+    
+    <div id="calendar-view" class="view">
+        <div class="container">
+            <div class="calendar-header">
+                <div class="calendar-nav">
+                    <button onclick="navCalendar(-1)">‹</button>
+                    <span class="calendar-title" id="calendar-title">February 2026</span>
+                    <button onclick="navCalendar(1)">›</button>
+                </div>
+                <div class="view-toggle">
+                    <button class="active" onclick="setCalView('daily')">Day</button>
+                    <button onclick="setCalView('weekly')">Week</button>
+                    <button onclick="setCalView('monthly')">Month</button>
+                    <button onclick="setCalView('annual')">Year</button>
+                </div>
+            </div>
+            <div id="calendar-content"></div>
+        </div>
+    </div>
+    
+    <button class="fab" onclick="openAdd()">+</button>
+    
+    <div class="modal" id="modal">
+        <div class="modal-content" id="modal-inner"></div>
     </div>
 
     <script>
         let data = JSON.parse(localStorage.getItem('moves-data')) || getDefaultData();
-        let modalMode = null;
-        let modalTarget = null;
+        let currentTab = 'tasks';
+        let calView = 'monthly';
+        let calDate = new Date();
+        let selectedDate = new Date();
         
         function getDefaultData() {
             return {
@@ -277,14 +528,220 @@
                         { id: 1, name: "The Cookout Trivia", steps: [] },
                         { id: 2, name: "Act Out Games", steps: [] }
                     ]}
-                ]
+                ],
+                events: []
             };
         }
         
-        function save() {
-            localStorage.setItem('moves-data', JSON.stringify(data));
+        if (!data.events) data.events = [];
+        
+        function save() { localStorage.setItem('moves-data', JSON.stringify(data)); }
+        
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelector(`.tab:nth-child(${tab === 'tasks' ? 1 : 2})`).classList.add('active');
+            document.getElementById(`${tab}-view`).classList.add('active');
+            if (tab === 'calendar') renderCalendar();
         }
         
+        function setCalView(view) {
+            calView = view;
+            document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            renderCalendar();
+        }
+        
+        function navCalendar(dir) {
+            if (calView === 'daily') calDate.setDate(calDate.getDate() + dir);
+            else if (calView === 'weekly') calDate.setDate(calDate.getDate() + (dir * 7));
+            else if (calView === 'monthly') calDate.setMonth(calDate.getMonth() + dir);
+            else if (calView === 'annual') calDate.setFullYear(calDate.getFullYear() + dir);
+            renderCalendar();
+        }
+        
+        function renderCalendar() {
+            const content = document.getElementById('calendar-content');
+            const title = document.getElementById('calendar-title');
+            const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+            const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+            const today = new Date();
+            
+            if (calView === 'monthly') {
+                title.textContent = `${months[calDate.getMonth()]} ${calDate.getFullYear()}`;
+                const firstDay = new Date(calDate.getFullYear(), calDate.getMonth(), 1);
+                const lastDay = new Date(calDate.getFullYear(), calDate.getMonth() + 1, 0);
+                const startDay = firstDay.getDay();
+                
+                let html = '<div class="calendar-grid"><div class="weekdays">';
+                days.forEach(d => html += `<div class="weekday">${d}</div>`);
+                html += '</div><div class="days">';
+                
+                const prevMonth = new Date(calDate.getFullYear(), calDate.getMonth(), 0);
+                for (let i = startDay - 1; i >= 0; i--) {
+                    html += `<div class="day other-month"><span class="day-num">${prevMonth.getDate() - i}</span></div>`;
+                }
+                
+                for (let d = 1; d <= lastDay.getDate(); d++) {
+                    const dateStr = `${calDate.getFullYear()}-${String(calDate.getMonth()+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                    const dayEvents = data.events.filter(e => e.date === dateStr);
+                    const isToday = today.getDate() === d && today.getMonth() === calDate.getMonth() && today.getFullYear() === calDate.getFullYear();
+                    html += `<div class="day${isToday ? ' today' : ''}" onclick="selectDay('${dateStr}')">
+                        <span class="day-num">${d}</span>
+                        <div class="day-events">${dayEvents.slice(0,3).map(() => '<div class="event-dot"></div>').join('')}</div>
+                    </div>`;
+                }
+                
+                const remaining = 42 - (startDay + lastDay.getDate());
+                for (let d = 1; d <= remaining; d++) {
+                    html += `<div class="day other-month"><span class="day-num">${d}</span></div>`;
+                }
+                
+                html += '</div></div>';
+                content.innerHTML = html;
+                
+            } else if (calView === 'daily') {
+                title.textContent = calDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+                const dateStr = calDate.toISOString().split('T')[0];
+                const dayEvents = data.events.filter(e => e.date === dateStr);
+                const isToday = today.toDateString() === calDate.toDateString();
+                
+                let html = `<div class="schedule"><div class="schedule-day">
+                    <div class="schedule-day-header${isToday ? ' today' : ''}">${isToday ? 'Today' : calDate.toLocaleDateString('en-US', { weekday: 'long' })}</div>`;
+                
+                if (dayEvents.length === 0) {
+                    html += '<div class="no-events">No events scheduled</div>';
+                } else {
+                    dayEvents.forEach(e => {
+                        html += `<div class="event">
+                            <div><div class="event-title">${e.title}</div>${e.time ? `<div class="event-time">${e.time}</div>` : ''}</div>
+                            <button class="btn small danger" onclick="deleteEvent(${e.id})">×</button>
+                        </div>`;
+                    });
+                }
+                html += '</div></div>';
+                content.innerHTML = html;
+                
+            } else if (calView === 'weekly') {
+                const startOfWeek = new Date(calDate);
+                startOfWeek.setDate(calDate.getDate() - calDate.getDay());
+                const endOfWeek = new Date(startOfWeek);
+                endOfWeek.setDate(startOfWeek.getDate() + 6);
+                
+                title.textContent = `${startOfWeek.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${endOfWeek.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+                
+                let html = '<div class="schedule">';
+                for (let i = 0; i < 7; i++) {
+                    const d = new Date(startOfWeek);
+                    d.setDate(startOfWeek.getDate() + i);
+                    const dateStr = d.toISOString().split('T')[0];
+                    const dayEvents = data.events.filter(e => e.date === dateStr);
+                    const isToday = today.toDateString() === d.toDateString();
+                    
+                    html += `<div class="schedule-day">
+                        <div class="schedule-day-header${isToday ? ' today' : ''}">${d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}${isToday ? ' (Today)' : ''}</div>`;
+                    
+                    if (dayEvents.length === 0) {
+                        html += '<div class="no-events">No events</div>';
+                    } else {
+                        dayEvents.forEach(e => {
+                            html += `<div class="event">
+                                <div><div class="event-title">${e.title}</div>${e.time ? `<div class="event-time">${e.time}</div>` : ''}</div>
+                                <button class="btn small danger" onclick="deleteEvent(${e.id})">×</button>
+                            </div>`;
+                        });
+                    }
+                    html += '</div>';
+                }
+                html += '</div>';
+                content.innerHTML = html;
+                
+            } else if (calView === 'annual') {
+                title.textContent = calDate.getFullYear();
+                let html = '<div class="annual-grid">';
+                
+                for (let m = 0; m < 12; m++) {
+                    const firstDay = new Date(calDate.getFullYear(), m, 1);
+                    const lastDay = new Date(calDate.getFullYear(), m + 1, 0);
+                    const startDay = firstDay.getDay();
+                    
+                    html += `<div class="mini-month"><div class="mini-month-title">${months[m]}</div><div class="mini-days">`;
+                    
+                    for (let i = 0; i < startDay; i++) html += '<div class="mini-day"></div>';
+                    
+                    for (let d = 1; d <= lastDay.getDate(); d++) {
+                        const dateStr = `${calDate.getFullYear()}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+                        const hasEvent = data.events.some(e => e.date === dateStr);
+                        const isToday = today.getDate() === d && today.getMonth() === m && today.getFullYear() === calDate.getFullYear();
+                        html += `<div class="mini-day${hasEvent ? ' has-event' : ''}${isToday ? ' today' : ''}">${d}</div>`;
+                    }
+                    
+                    html += '</div></div>';
+                }
+                html += '</div>';
+                content.innerHTML = html;
+            }
+        }
+        
+        function selectDay(dateStr) {
+            selectedDate = new Date(dateStr + 'T12:00:00');
+            calDate = new Date(dateStr + 'T12:00:00');
+            calView = 'daily';
+            document.querySelectorAll('.view-toggle button').forEach(b => b.classList.remove('active'));
+            document.querySelector('.view-toggle button:first-child').classList.add('active');
+            renderCalendar();
+        }
+        
+        function deleteEvent(id) {
+            if (confirm('Delete this event?')) {
+                data.events = data.events.filter(e => e.id !== id);
+                save();
+                renderCalendar();
+            }
+        }
+        
+        function openAdd() {
+            if (currentTab === 'tasks') {
+                openAddBusiness();
+            } else {
+                openAddEvent();
+            }
+        }
+        
+        function openAddEvent() {
+            const dateStr = calDate.toISOString().split('T')[0];
+            document.getElementById('modal-inner').innerHTML = `
+                <h2>Add Event</h2>
+                <label>Title</label>
+                <input type="text" id="event-title" placeholder="Event title...">
+                <label>Date</label>
+                <input type="date" id="event-date" value="${dateStr}">
+                <label>Time (optional)</label>
+                <input type="time" id="event-time">
+                <div class="actions">
+                    <button class="btn ghost" onclick="closeModal()">Cancel</button>
+                    <button class="btn" onclick="saveEvent()">Save</button>
+                </div>
+            `;
+            document.getElementById('modal').classList.add('open');
+            document.getElementById('event-title').focus();
+        }
+        
+        function saveEvent() {
+            const title = document.getElementById('event-title').value.trim();
+            const date = document.getElementById('event-date').value;
+            const time = document.getElementById('event-time').value;
+            if (!title || !date) return;
+            
+            const newId = data.events.length > 0 ? Math.max(...data.events.map(e => e.id)) + 1 : 1;
+            data.events.push({ id: newId, title, date, time });
+            save();
+            closeModal();
+            renderCalendar();
+        }
+        
+        // Task functions
         function render() {
             const app = document.getElementById('app');
             app.innerHTML = data.businesses.map(b => {
@@ -333,17 +790,14 @@
             }).join('');
         }
         
-        function toggleBusiness(id) {
-            document.getElementById(`biz-${id}`).classList.toggle('open');
-        }
+        function toggleBusiness(id) { document.getElementById(`biz-${id}`).classList.toggle('open'); }
         
         function toggleStep(bizId, goalId, stepId) {
             const biz = data.businesses.find(b => b.id === bizId);
             const goal = biz.goals.find(g => g.id === goalId);
             const step = goal.steps.find(s => s.id === stepId);
             step.done = !step.done;
-            save();
-            render();
+            save(); render();
         }
         
         function addStep(bizId, goalId) {
@@ -354,46 +808,96 @@
             const newId = goal.steps.length > 0 ? Math.max(...goal.steps.map(s => s.id)) + 1 : 1;
             goal.steps.push({ id: newId, text: input.value.trim(), done: false });
             input.value = '';
-            save();
-            render();
+            save(); render();
         }
         
         function openAddBusiness() {
-            modalMode = 'add-business';
-            document.getElementById('modal-title').textContent = 'Add Business';
-            document.getElementById('modal-input').value = '';
+            document.getElementById('modal-inner').innerHTML = `
+                <h2>Add Business</h2>
+                <input type="text" id="modal-input" placeholder="Enter name...">
+                <div class="actions">
+                    <button class="btn ghost" onclick="closeModal()">Cancel</button>
+                    <button class="btn" onclick="saveBusiness()">Save</button>
+                </div>
+            `;
             document.getElementById('modal').classList.add('open');
             document.getElementById('modal-input').focus();
         }
         
+        function saveBusiness() {
+            const value = document.getElementById('modal-input').value.trim();
+            if (!value) return;
+            const newId = data.businesses.length > 0 ? Math.max(...data.businesses.map(b => b.id)) + 1 : 1;
+            data.businesses.push({ id: newId, name: value, goals: [] });
+            save(); render(); closeModal();
+        }
+        
         function openAddGoal(bizId) {
-            modalMode = 'add-goal';
-            modalTarget = bizId;
-            document.getElementById('modal-title').textContent = 'Add Goal';
-            document.getElementById('modal-input').value = '';
+            document.getElementById('modal-inner').innerHTML = `
+                <h2>Add Goal</h2>
+                <input type="text" id="modal-input" placeholder="Enter goal...">
+                <div class="actions">
+                    <button class="btn ghost" onclick="closeModal()">Cancel</button>
+                    <button class="btn" onclick="saveGoal(${bizId})">Save</button>
+                </div>
+            `;
             document.getElementById('modal').classList.add('open');
             document.getElementById('modal-input').focus();
+        }
+        
+        function saveGoal(bizId) {
+            const value = document.getElementById('modal-input').value.trim();
+            if (!value) return;
+            const biz = data.businesses.find(b => b.id === bizId);
+            const newId = biz.goals.length > 0 ? Math.max(...biz.goals.map(g => g.id)) + 1 : 1;
+            biz.goals.push({ id: newId, name: value, steps: [] });
+            save(); render(); closeModal();
         }
         
         function editBusiness(id) {
             const biz = data.businesses.find(b => b.id === id);
-            modalMode = 'edit-business';
-            modalTarget = id;
-            document.getElementById('modal-title').textContent = 'Edit Business';
-            document.getElementById('modal-input').value = biz.name;
+            document.getElementById('modal-inner').innerHTML = `
+                <h2>Edit Business</h2>
+                <input type="text" id="modal-input" value="${biz.name}">
+                <div class="actions">
+                    <button class="btn ghost" onclick="closeModal()">Cancel</button>
+                    <button class="btn" onclick="updateBusiness(${id})">Save</button>
+                </div>
+            `;
             document.getElementById('modal').classList.add('open');
             document.getElementById('modal-input').focus();
+        }
+        
+        function updateBusiness(id) {
+            const value = document.getElementById('modal-input').value.trim();
+            if (!value) return;
+            const biz = data.businesses.find(b => b.id === id);
+            biz.name = value;
+            save(); render(); closeModal();
         }
         
         function editGoal(bizId, goalId) {
             const biz = data.businesses.find(b => b.id === bizId);
             const goal = biz.goals.find(g => g.id === goalId);
-            modalMode = 'edit-goal';
-            modalTarget = { bizId, goalId };
-            document.getElementById('modal-title').textContent = 'Edit Goal';
-            document.getElementById('modal-input').value = goal.name;
+            document.getElementById('modal-inner').innerHTML = `
+                <h2>Edit Goal</h2>
+                <input type="text" id="modal-input" value="${goal.name}">
+                <div class="actions">
+                    <button class="btn ghost" onclick="closeModal()">Cancel</button>
+                    <button class="btn" onclick="updateGoal(${bizId}, ${goalId})">Save</button>
+                </div>
+            `;
             document.getElementById('modal').classList.add('open');
             document.getElementById('modal-input').focus();
+        }
+        
+        function updateGoal(bizId, goalId) {
+            const value = document.getElementById('modal-input').value.trim();
+            if (!value) return;
+            const biz = data.businesses.find(b => b.id === bizId);
+            const goal = biz.goals.find(g => g.id === goalId);
+            goal.name = value;
+            save(); render(); closeModal();
         }
         
         function editStep(bizId, goalId, stepId) {
@@ -403,16 +907,14 @@
             const newText = prompt('Edit step:', step.text);
             if (newText && newText.trim()) {
                 step.text = newText.trim();
-                save();
-                render();
+                save(); render();
             }
         }
         
         function deleteBusiness(id) {
             if (confirm('Delete this business and all its goals?')) {
                 data.businesses = data.businesses.filter(b => b.id !== id);
-                save();
-                render();
+                save(); render();
             }
         }
         
@@ -420,44 +922,17 @@
             if (confirm('Delete this goal and all its steps?')) {
                 const biz = data.businesses.find(b => b.id === bizId);
                 biz.goals = biz.goals.filter(g => g.id !== goalId);
-                save();
-                render();
+                save(); render();
             }
         }
         
-        function closeModal() {
-            document.getElementById('modal').classList.remove('open');
-            modalMode = null;
-            modalTarget = null;
-        }
+        function closeModal() { document.getElementById('modal').classList.remove('open'); }
         
-        document.getElementById('modal-save').onclick = function() {
-            const value = document.getElementById('modal-input').value.trim();
-            if (!value) return;
-            
-            if (modalMode === 'add-business') {
-                const newId = data.businesses.length > 0 ? Math.max(...data.businesses.map(b => b.id)) + 1 : 1;
-                data.businesses.push({ id: newId, name: value, goals: [] });
-            } else if (modalMode === 'add-goal') {
-                const biz = data.businesses.find(b => b.id === modalTarget);
-                const newId = biz.goals.length > 0 ? Math.max(...biz.goals.map(g => g.id)) + 1 : 1;
-                biz.goals.push({ id: newId, name: value, steps: [] });
-            } else if (modalMode === 'edit-business') {
-                const biz = data.businesses.find(b => b.id === modalTarget);
-                biz.name = value;
-            } else if (modalMode === 'edit-goal') {
-                const biz = data.businesses.find(b => b.id === modalTarget.bizId);
-                const goal = biz.goals.find(g => g.id === modalTarget.goalId);
-                goal.name = value;
+        document.getElementById('modal').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const saveBtn = document.querySelector('.modal .btn:not(.ghost)');
+                if (saveBtn) saveBtn.click();
             }
-            
-            save();
-            render();
-            closeModal();
-        };
-        
-        document.getElementById('modal-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') document.getElementById('modal-save').click();
         });
         
         render();
