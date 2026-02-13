@@ -1226,6 +1226,468 @@
             margin-bottom: 12px;
             display: block;
         }
+
+        /* Journal Section Styles */
+        .journal-section {
+            background: var(--card);
+            border-radius: 16px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .section-header {
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: linear-gradient(135deg, rgba(233, 69, 96, 0.1) 0%, rgba(15, 52, 96, 0.2) 100%);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .section-icon {
+            font-size: 1.8rem;
+            filter: drop-shadow(0 0 10px rgba(233, 69, 96, 0.4));
+        }
+
+        .section-title h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .section-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin: 0;
+        }
+
+        /* Mental Reps Styles */
+        .mental-reps {
+            border: 1px solid rgba(78, 204, 163, 0.2);
+        }
+
+        .mental-reps .section-header {
+            background: linear-gradient(135deg, rgba(78, 204, 163, 0.15) 0%, rgba(15, 52, 96, 0.2) 100%);
+        }
+
+        .mental-reps-cards {
+            padding: 16px;
+            display: grid;
+            gap: 12px;
+        }
+
+        .mental-rep-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid rgba(78, 204, 163, 0.15);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .mental-rep-card:hover {
+            background: rgba(78, 204, 163, 0.08);
+            border-color: rgba(78, 204, 163, 0.3);
+            transform: translateX(4px);
+        }
+
+        .mental-rep-card.active {
+            background: rgba(78, 204, 163, 0.12);
+            border-color: rgba(78, 204, 163, 0.5);
+        }
+
+        .mental-rep-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--success) 0%, #5dd9b0 100%);
+            border-radius: 50%;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--bg);
+            margin-bottom: 10px;
+        }
+
+        .mental-rep-question {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+
+        .mental-rep-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            background: rgba(0,0,0,0.2);
+            color: var(--text);
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+        }
+
+        .mental-rep-input:focus {
+            outline: none;
+            border-color: var(--success);
+        }
+
+        .mental-rep-input::placeholder {
+            color: var(--text-dim);
+        }
+
+        /* Daily Prompts Styles */
+        .daily-prompts {
+            border: 1px solid rgba(233, 69, 96, 0.2);
+        }
+
+        .daily-prompts .section-header {
+            background: linear-gradient(135deg, rgba(233, 69, 96, 0.15) 0%, rgba(15, 52, 96, 0.2) 100%);
+        }
+
+        .prompts-list {
+            padding: 16px;
+            display: grid;
+            gap: 16px;
+        }
+
+        .prompt-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 16px;
+            border-left: 4px solid var(--accent);
+            transition: all 0.2s ease;
+        }
+
+        .prompt-card:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .prompt-card.answered {
+            border-left-color: var(--success);
+            background: rgba(78, 204, 163, 0.05);
+        }
+
+        .prompt-question {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .prompt-input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            background: rgba(0,0,0,0.2);
+            color: var(--text);
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+            line-height: 1.5;
+        }
+
+        .prompt-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.1);
+        }
+
+        .prompt-input::placeholder {
+            color: var(--text-dim);
+        }
+
+        .prompt-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .prompt-category {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent);
+            font-weight: 600;
+            padding: 4px 10px;
+            background: rgba(233, 69, 96, 0.1);
+            border-radius: 4px;
+        }
+
+        .save-indicator {
+            font-size: 0.75rem;
+            color: var(--success);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .save-indicator.visible {
+            opacity: 1;
+        }
+
+        /* Weekly Analysis Styles */
+        .weekly-analysis {
+            border: 1px solid rgba(232, 169, 63, 0.2);
+        }
+
+        .weekly-analysis .section-header {
+            background: linear-gradient(135deg, rgba(232, 169, 63, 0.15) 0%, rgba(15, 52, 96, 0.2) 100%);
+        }
+
+        .weekly-analysis .section-icon {
+            filter: drop-shadow(0 0 10px rgba(232, 169, 63, 0.4));
+        }
+
+        .weekly-content {
+            padding: 16px;
+        }
+
+        .weekly-locked {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-dim);
+        }
+
+        .weekly-locked-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .weekly-locked-text {
+            font-size: 1rem;
+            margin-bottom: 8px;
+        }
+
+        .weekly-locked-subtext {
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        .weekly-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--success);
+            margin-bottom: 4px;
+        }
+
+        .stat-value.warning {
+            color: #e8a93f;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .pattern-detection {
+            background: rgba(232, 169, 63, 0.08);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(232, 169, 63, 0.2);
+        }
+
+        .pattern-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #e8a93f;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .pattern-text {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text);
+        }
+
+        .pattern-highlight {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .pattern-lowlight {
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+
+        .weekly-prompt {
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            padding: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .weekly-prompt-question {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .weekly-input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            background: rgba(0,0,0,0.2);
+            color: var(--text);
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+            line-height: 1.5;
+        }
+
+        .weekly-input:focus {
+            outline: none;
+            border-color: #e8a93f;
+            box-shadow: 0 0 0 3px rgba(232, 169, 63, 0.1);
+        }
+
+        /* Journal History Styles */
+        .journal-history {
+            border: 1px solid rgba(107, 181, 255, 0.2);
+        }
+
+        .journal-history .section-header {
+            background: linear-gradient(135deg, rgba(107, 181, 255, 0.1) 0%, rgba(15, 52, 96, 0.2) 100%);
+        }
+
+        .journal-history .section-icon {
+            filter: drop-shadow(0 0 10px rgba(107, 181, 255, 0.4));
+        }
+
+        .entries-list {
+            padding: 16px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .entries-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .entries-list::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+            border-radius: 3px;
+        }
+
+        .entries-list::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 3px;
+        }
+
+        .entry-card {
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.2s ease;
+        }
+
+        .entry-card:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .entry-date {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .entry-type {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 4px 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+            color: var(--text-dim);
+        }
+
+        .entry-question {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .entry-answer {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .empty-entries {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .clear-all-btn {
+            background: transparent;
+            border: 1px solid rgba(233, 69, 96, 0.3);
+            color: var(--accent);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: all 0.2s;
+        }
+
+        .clear-all-btn:hover {
+            background: rgba(233, 69, 96, 0.1);
+        }
+
+        /* Journal Tab Active State */
+        .tab:nth-child(3).active {
+            color: var(--success);
+            border-bottom-color: var(--success);
+        }
     </style>
 </head>
 <body>
@@ -1297,6 +1759,93 @@
         </div>
     </div>
     
+    <div id="journal-view" class="view">
+        <div class="journal-container">
+            <!-- Date Navigation -->
+            <div class="journal-nav">
+                <button onclick="navJournalDate(-1)">‹</button>
+                <button class="today-btn" onclick="goToToday()">Today</button>
+                <button onclick="navJournalDate(1)">›</button>
+            </div>
+
+            <!-- Header with Date -->
+            <div class="journal-header">
+                <div class="journal-date" id="journal-date-display">Today</div>
+                <div class="journal-subtitle" id="journal-date-subtitle">Reflect on your progress</div>
+            </div>
+
+            <!-- Daily Summary (Auto-generated) -->
+            <div class="daily-summary">
+                <h3>📊 Daily Summary</h3>
+                <div class="summary-stats" id="journal-summary-stats">
+                    <div class="stat-box">
+                        <span class="stat-value" id="stat-completed">0</span>
+                        <div class="stat-label">Completed</div>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-value" id="stat-streak">0</span>
+                        <div class="stat-label">Day Streak</div>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-value" id="stat-projects">0</span>
+                        <div class="stat-label">Projects</div>
+                    </div>
+                </div>
+                <div class="completed-projects" id="completed-projects-list">
+                    <h4>Projects that got attention:</h4>
+                    <div id="projects-chips"></div>
+                </div>
+            </div>
+
+            <!-- Journal Entry Area -->
+            <div class="journal-entry-section">
+                <h3>📝 Today's Reflection</h3>
+                <div class="journal-prompts">
+                    <h4>Reflection Prompts:</h4>
+                    <ul class="prompt-list">
+                        <li>What went well today?</li>
+                        <li>What blocked you?</li>
+                        <li>What will you do differently tomorrow?</li>
+                    </ul>
+                </div>
+                <textarea
+                    class="journal-textarea"
+                    id="journal-textarea"
+                    placeholder="Take a moment to reflect on your day...&#10;&#10;What did you accomplish?&#10;What challenges did you face?&#10;What are you grateful for?"
+                ></textarea>
+                <div class="journal-actions">
+                    <span class="save-status" id="save-status">✓ Saved</span>
+                    <button class="btn" onclick="saveJournalEntry()">Save Entry</button>
+                </div>
+            </div>
+
+            <!-- Past Entry View (if exists) -->
+            <div class="past-entry" id="past-entry-section" style="display: none;">
+                <h4>🕘 Journal Entry</h4>
+                <div class="past-entry-content" id="past-entry-content"></div>
+            </div>
+
+            <!-- History Calendar -->
+            <div class="journal-history">
+                <h3>📅 History</h3>
+                <div class="history-calendar" id="history-calendar">
+                    <!-- Calendar generated by JS -->
+                </div>
+            </div>
+
+            <!-- Productivity Patterns -->
+            <div class="productivity-patterns">
+                <h3>📈 Productivity Patterns</h3>
+                <div class="pattern-chart" id="pattern-chart">
+                    <!-- Bars generated by JS -->
+                </div>
+                <div class="pattern-insight" id="pattern-insight">
+                    <p>Loading your productivity insights...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="calendar-view" class="view">
         <div class="container">
             <div class="calendar-header">
@@ -1316,66 +1865,6 @@
         </div>
     </div>
 
-    <div id="journal-view" class="view">
-        <div class="container" id="journal-container">
-            <!-- Mental Reps Section - Quick Daily Exercises -->
-            <div class="journal-section mental-reps">
-                <div class="section-header">
-                    <span class="section-icon">🧠</span>
-                    <div class="section-title">
-                        <h2>Mental Reps</h2>
-                        <p class="section-subtitle">Quick daily exercises to sharpen your thinking</p>
-                    </div>
-                </div>
-                <div class="mental-reps-cards" id="mental-reps-container">
-                    <!-- Mental reps injected by JS -->
-                </div>
-            </div>
-
-            <!-- Daily Analytical Prompts -->
-            <div class="journal-section daily-prompts">
-                <div class="section-header">
-                    <span class="section-icon">⚡</span>
-                    <div class="section-title">
-                        <h2>Daily Deep Dive</h2>
-                        <p class="section-subtitle">Think sharper. Don't just write—analyze.</p>
-                    </div>
-                </div>
-                <div class="prompts-list" id="daily-prompts-container">
-                    <!-- Prompts injected by JS -->
-                </div>
-            </div>
-
-            <!-- Weekly Analysis Section -->
-            <div class="journal-section weekly-analysis" id="weekly-analysis-section">
-                <div class="section-header">
-                    <span class="section-icon">📊</span>
-                    <div class="section-title">
-                        <h2>Weekly Analysis</h2>
-                        <p class="section-subtitle" id="weekly-analysis-subtitle">Available every Sunday</p>
-                    </div>
-                </div>
-                <div class="weekly-content" id="weekly-analysis-container">
-                    <!-- Weekly analysis injected by JS -->
-                </div>
-            </div>
-
-            <!-- Journal History -->
-            <div class="journal-section journal-history">
-                <div class="section-header">
-                    <span class="section-icon">📚</span>
-                    <div class="section-title">
-                        <h2>Your Entries</h2>
-                        <p class="section-subtitle">Track your thinking over time</p>
-                    </div>
-                </div>
-                <div class="entries-list" id="journal-entries-container">
-                    <!-- Entries injected by JS -->
-                </div>
-            </div>
-        </div>
-    </div>
-    
     <button class="fab" onclick="openAdd()">+</button>
     
     <div class="modal" id="modal">
@@ -1984,9 +2473,11 @@
             currentTab = tab;
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.querySelector(`.tab:nth-child(${tab === 'tasks' ? 1 : 2})`).classList.add('active');
+            const tabIndex = tab === 'tasks' ? 1 : tab === 'calendar' ? 2 : 3;
+            document.querySelector(`.tab:nth-child(${tabIndex})`).classList.add('active');
             document.getElementById(`${tab}-view`).classList.add('active');
             if (tab === 'calendar') renderCalendar();
+            if (tab === 'journal') renderJournal();
         }
         
         function setCalView(view) {
@@ -2452,6 +2943,343 @@
 
         // Set the daily affirmation on page load
         document.getElementById('daily-affirmation').textContent = getDailyAffirmation();
+
+        // ==================== JOURNAL SECTION ====================
+        let journalDate = new Date();
+        let journalData = JSON.parse(localStorage.getItem('moves-journal')) || {};
+
+        function navJournalDate(days) {
+            journalDate.setDate(journalDate.getDate() + days);
+            renderJournal();
+        }
+
+        function goToToday() {
+            journalDate = new Date();
+            renderJournal();
+        }
+
+        function formatJournalDate(date) {
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            const dateStr = date.toDateString();
+
+            if (dateStr === today.toDateString()) return 'Today';
+            if (dateStr === yesterday.toDateString()) return 'Yesterday';
+
+            return date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+        }
+
+        function getDateKey(date) {
+            return date.toISOString().split('T')[0];
+        }
+
+        function getCompletionsForDate(date) {
+            const dateKey = getDateKey(date);
+            const history = JSON.parse(localStorage.getItem('moves-completion-history')) || {};
+
+            const completions = [];
+            const projects = new Set();
+
+            Object.entries(history).forEach(([key, entry]) => {
+                const entryDate = typeof entry === 'string' ? entry : entry.date;
+                if (entryDate === dateKey) {
+                    completions.push(entry);
+                    if (typeof entry === 'object' && entry.businessName) {
+                        projects.add(entry.businessName);
+                    }
+                }
+            });
+
+            return { completions, projects: Array.from(projects) };
+        }
+
+        function getStreakForDate(date) {
+            const history = JSON.parse(localStorage.getItem('moves-completion-history')) || {};
+            const dateCompletions = {};
+
+            Object.values(history).forEach(entry => {
+                const dateStr = typeof entry === 'string' ? entry : entry.date;
+                dateCompletions[dateStr] = (dateCompletions[dateStr] || 0) + 1;
+            });
+
+            const checkDate = new Date(date);
+            let streak = 0;
+
+            // Go backwards from the given date
+            while (true) {
+                const dateStr = getDateKey(checkDate);
+                if (dateCompletions[dateStr] && dateCompletions[dateStr] > 0) {
+                    streak++;
+                    checkDate.setDate(checkDate.getDate() - 1);
+                } else {
+                    break;
+                }
+            }
+
+            return streak;
+        }
+
+        function renderJournal() {
+            const dateKey = getDateKey(journalDate);
+            const isToday = dateKey === getDateKey(new Date());
+            const isFuture = journalDate > new Date();
+
+            // Update header
+            const dateDisplay = document.getElementById('journal-date-display');
+            const dateSubtitle = document.getElementById('journal-date-subtitle');
+            if (dateDisplay) dateDisplay.textContent = formatJournalDate(journalDate);
+            if (dateSubtitle) dateSubtitle.textContent = isToday ? 'Reflect on your progress' : isFuture ? 'Plan ahead' : 'View past entry';
+
+            // Get completions for this date
+            const { completions, projects } = getCompletionsForDate(journalDate);
+
+            // Update summary stats
+            const statCompleted = document.getElementById('stat-completed');
+            const statStreak = document.getElementById('stat-streak');
+            const statProjects = document.getElementById('stat-projects');
+
+            if (statCompleted) statCompleted.textContent = completions.length;
+
+            const streak = getStreakForDate(journalDate);
+            if (statStreak) {
+                statStreak.textContent = streak;
+                statStreak.className = streak >= 3 ? 'stat-value streak-hot' : 'stat-value';
+            }
+
+            if (statProjects) statProjects.textContent = projects.length;
+
+            // Update project chips
+            const chipsContainer = document.getElementById('projects-chips');
+            if (chipsContainer) {
+                if (projects.length > 0) {
+                    chipsContainer.innerHTML = projects.map(p => `<span class="project-chip">${p}</span>`).join('');
+                } else {
+                    chipsContainer.innerHTML = '<div class="no-completions">No tasks completed on this day</div>';
+                }
+            }
+
+            // Handle textarea visibility and content
+            const textarea = document.getElementById('journal-textarea');
+            const saveBtn = document.querySelector('.journal-actions .btn');
+            const pastEntrySection = document.getElementById('past-entry-section');
+            const pastEntryContent = document.getElementById('past-entry-content');
+            const promptsSection = document.querySelector('.journal-prompts');
+
+            const entry = journalData[dateKey];
+
+            if (isFuture) {
+                // Future date - hide textarea
+                if (textarea) textarea.style.display = 'none';
+                if (saveBtn) saveBtn.style.display = 'none';
+                if (pastEntrySection) pastEntrySection.style.display = 'none';
+                if (promptsSection) promptsSection.style.display = 'none';
+            } else if (isToday) {
+                // Today - show textarea for editing
+                if (textarea) {
+                    textarea.style.display = 'block';
+                    textarea.value = entry ? entry.entry : '';
+                }
+                if (saveBtn) saveBtn.style.display = 'block';
+                if (promptsSection) promptsSection.style.display = 'block';
+                if (pastEntrySection) pastEntrySection.style.display = 'none';
+            } else {
+                // Past date - show readonly view
+                if (textarea) textarea.style.display = 'none';
+                if (saveBtn) saveBtn.style.display = 'none';
+                if (promptsSection) promptsSection.style.display = 'none';
+
+                if (pastEntrySection) {
+                    pastEntrySection.style.display = 'block';
+                    if (pastEntryContent) {
+                        if (entry && entry.entry) {
+                            pastEntryContent.textContent = entry.entry;
+                        } else {
+                            pastEntryContent.innerHTML = '<div class="past-entry-empty">No journal entry for this day</div>';
+                        }
+                    }
+                }
+            }
+
+            // Render history calendar
+            renderHistoryCalendar();
+
+            // Render productivity patterns
+            renderProductivityPatterns();
+        }
+
+        function saveJournalEntry() {
+            const dateKey = getDateKey(journalDate);
+            const textarea = document.getElementById('journal-textarea');
+            const entry = textarea ? textarea.value.trim() : '';
+
+            if (!journalData[dateKey]) {
+                journalData[dateKey] = {};
+            }
+
+            journalData[dateKey].entry = entry;
+            journalData[dateKey].timestamp = new Date().toISOString();
+
+            // Generate auto-summary
+            const { completions, projects } = getCompletionsForDate(journalDate);
+            journalData[dateKey].autoSummary = {
+                completed: completions.length,
+                projects: projects,
+                streak: getStreakForDate(journalDate),
+                date: dateKey
+            };
+
+            localStorage.setItem('moves-journal', JSON.stringify(journalData));
+
+            // Show save confirmation
+            const saveStatus = document.getElementById('save-status');
+            if (saveStatus) {
+                saveStatus.classList.add('visible');
+                setTimeout(() => saveStatus.classList.remove('visible'), 2000);
+            }
+
+            // Refresh calendar to show entry indicator
+            renderHistoryCalendar();
+        }
+
+        function renderHistoryCalendar() {
+            const container = document.getElementById('history-calendar');
+            if (!container) return;
+
+            const today = new Date();
+            const currentMonth = journalDate.getMonth();
+            const currentYear = journalDate.getFullYear();
+
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            const lastDay = new Date(currentYear, currentMonth + 1, 0);
+            const startDayOfWeek = firstDay.getDay();
+
+            const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+
+            let html = '';
+
+            // Header
+            days.forEach(d => {
+                html += `<div class="history-calendar-header">${d}</div>`;
+            });
+
+            // Previous month padding
+            const prevMonth = new Date(currentYear, currentMonth, 0);
+            for (let i = startDayOfWeek - 1; i >= 0; i--) {
+                html += `<div class="history-day other-month">${prevMonth.getDate() - i}</div>`;
+            }
+
+            // Current month days
+            for (let d = 1; d <= lastDay.getDate(); d++) {
+                const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                const isToday = today.getDate() === d && today.getMonth() === currentMonth && today.getFullYear() === currentYear;
+                const isSelected = journalDate.getDate() === d && journalDate.getMonth() === currentMonth && journalDate.getFullYear() === currentYear;
+                const hasEntry = journalData[dateStr] && journalData[dateStr].entry;
+                const hasSummary = journalData[dateStr] && journalData[dateStr].autoSummary;
+
+                html += `<div class="history-day${isToday ? ' today' : ''}${isSelected ? ' selected' : ''}${hasEntry ? ' has-entry' : ''}${hasSummary ? ' has-summary' : ''}" onclick="selectJournalDate('${dateStr}')">${d}</div>`;
+            }
+
+            // Next month padding
+            const remaining = (7 - ((startDayOfWeek + lastDay.getDate()) % 7)) % 7;
+            for (let d = 1; d <= remaining; d++) {
+                html += `<div class="history-day other-month">${d}</div>`;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function selectJournalDate(dateStr) {
+            journalDate = new Date(dateStr + 'T12:00:00');
+            renderJournal();
+        }
+
+        function renderProductivityPatterns() {
+            const chart = document.getElementById('pattern-chart');
+            const insight = document.getElementById('pattern-insight');
+            if (!chart || !insight) return;
+
+            const history = JSON.parse(localStorage.getItem('moves-completion-history')) || {};
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const dayCounts = [0, 0, 0, 0, 0, 0, 0];
+
+            // Count completions per day of week
+            Object.values(history).forEach(entry => {
+                const dateStr = typeof entry === 'string' ? entry : entry.date;
+                const date = new Date(dateStr);
+                const dayOfWeek = date.getDay();
+                dayCounts[dayOfWeek]++;
+            });
+
+            // Calculate max for scaling
+            const maxCount = Math.max(...dayCounts, 1);
+
+            // Find best day
+            let bestDayIndex = 0;
+            let bestDayCount = 0;
+            dayCounts.forEach((count, index) => {
+                if (count > bestDayCount) {
+                    bestDayCount = count;
+                    bestDayIndex = index;
+                }
+            });
+
+            // Render bars
+            let html = '';
+
+            dayNames.forEach((name, index) => {
+                const height = (dayCounts[index] / maxCount) * 100;
+                const isBest = index === bestDayIndex && dayCounts[index] > 0;
+
+                html += `
+                    <div class="pattern-bar-container">
+                        <div class="pattern-value">${dayCounts[index]}</div>
+                        <div class="pattern-bar${isBest ? ' best' : ''}" style="height: ${Math.max(height, 4)}%"></div>
+                        <div class="pattern-label">${name}</div>
+                    </div>
+                `;
+            });
+
+            chart.innerHTML = html;
+
+            // Update insight
+            if (dayCounts.reduce((a, b) => a + b, 0) === 0) {
+                insight.innerHTML = '<p>Complete some tasks to see your productivity patterns emerge!</p>';
+            } else {
+                const bestDay = dayNames[bestDayIndex];
+                const avgCompletions = (dayCounts.reduce((a, b) => a + b, 0) / 7).toFixed(1);
+                insight.innerHTML = `<p>You\'re most productive on <strong>${bestDay}s</strong> with ${bestDayCount} completions. Your average is ${avgCompletions} completions per day.</p>`;
+            }
+        }
+
+        // Auto-save journal entry on textarea blur
+        document.addEventListener('DOMContentLoaded', function() {
+            const textarea = document.getElementById('journal-textarea');
+            if (textarea) {
+                textarea.addEventListener('blur', function() {
+                    if (getDateKey(journalDate) === getDateKey(new Date())) {
+                        saveJournalEntry();
+                    }
+                });
+            }
+        });
+
+        // Override switchTab to handle journal
+        window.switchTab = function(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+
+            const tabIndex = tab === 'tasks' ? 1 : tab === 'calendar' ? 2 : 3;
+            document.querySelector(`.tab:nth-child(${tabIndex})`).classList.add('active');
+            document.getElementById(`${tab}-view`).classList.add('active');
+
+            if (tab === 'calendar') renderCalendar();
+            if (tab === 'journal') renderJournal();
+        };
+
+        // ==================== END JOURNAL SECTION ====================
 
         render();
         renderSummary();
