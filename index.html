@@ -39,6 +39,119 @@
             z-index: 100;
             border-bottom: 1px solid rgba(201, 162, 39, 0.3);
         }
+
+        /* Daily Affirmation Banner Styles */
+        .affirmation-banner {
+            background: linear-gradient(135deg, rgba(201, 162, 39, 0.15) 0%, rgba(184, 148, 43, 0.08) 50%, rgba(201, 162, 39, 0.15) 100%);
+            border-top: 1px solid rgba(201, 162, 39, 0.4);
+            border-bottom: 1px solid rgba(201, 162, 39, 0.4);
+            padding: 16px 20px;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .affirmation-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(232, 212, 138, 0.2), transparent);
+            animation: shimmer 4s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            50% { left: 100%; }
+            100% { left: 100%; }
+        }
+
+        .affirmation-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 120%;
+            background: radial-gradient(ellipse, rgba(201, 162, 39, 0.3) 0%, transparent 70%);
+            filter: blur(20px);
+            animation: pulse 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.05); }
+        }
+
+        .affirmation-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .affirmation-icon {
+            font-size: 1.4rem;
+            animation: float 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 8px rgba(201, 162, 39, 0.6));
+        }
+
+        .affirmation-icon:last-child {
+            animation-delay: 1s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        .affirmation-text {
+            font-family: 'Georgia', 'Didot', serif;
+            font-size: 1.05rem;
+            font-weight: 500;
+            font-style: italic;
+            color: #E8D48A;
+            text-shadow: 0 0 20px rgba(232, 212, 138, 0.5), 0 0 40px rgba(201, 162, 39, 0.3);
+            letter-spacing: 0.5px;
+            line-height: 1.4;
+            max-width: 600px;
+        }
+
+        .affirmation-sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #E8D48A;
+            border-radius: 50%;
+            top: 20%;
+            left: 10%;
+            animation: sparkle 2s ease-in-out infinite;
+            box-shadow: 0 0 10px #E8D48A, 0 0 20px #C9A227;
+        }
+
+        .affirmation-sparkle::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #E8D48A;
+            border-radius: 50%;
+            top: 300%;
+            left: 800%;
+            animation: sparkle 2.5s ease-in-out infinite 0.5s;
+            box-shadow: 0 0 10px #E8D48A, 0 0 20px #C9A227;
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
         
         .logo-container {
             display: flex;
@@ -434,6 +547,17 @@
         </div>
     </header>
     
+    <!-- Daily Affirmation Banner -->
+    <div class="affirmation-banner">
+        <div class="affirmation-glow"></div>
+        <div class="affirmation-content">
+            <span class="affirmation-icon">👑</span>
+            <span class="affirmation-text" id="daily-affirmation">Loading your million dollar mindset...</span>
+            <span class="affirmation-icon">💎</span>
+        </div>
+        <div class="affirmation-sparkle"></div>
+    </div>
+
     <div class="tabs">
         <div class="tab active" onclick="switchTab('tasks')">Tasks</div>
         <div class="tab" onclick="switchTab('calendar')">Calendar</div>
@@ -917,7 +1041,58 @@
                 if (saveBtn) saveBtn.click();
             }
         });
-        
+
+        // Daily Affirmation System
+        const affirmations = [
+            "I am a money magnet. Wealth flows to me effortlessly.",
+            "I think like a CEO. I move like a boss.",
+            "My ideas are worth millions. My execution is priceless.",
+            "I don't chase. I attract.",
+            "Winners don't wait. Winners execute.",
+            "I am building an empire, one move at a time.",
+            "Abundance is my birthright. Success is my reality.",
+            "I invest in myself because I am my greatest asset.",
+            "Every decision I make multiplies my wealth.",
+            "I am the architect of my own fortune.",
+            "Money works for me while I sleep. That's boss thinking.",
+            "I turn obstacles into opportunities. That's the millionaire mindset.",
+            "My network is my net worth. I build with kings.",
+            "I don't compete. I dominate.",
+            "Scarcity is a mindset. I operate in abundance.",
+            "I am the standard. Others rise to meet it.",
+            "My vision is clear. My moves are calculated. My success is inevitable.",
+            "I create value and wealth follows.",
+            "Fear is temporary. Regret is forever. I choose action.",
+            "I am not lucky. I am prepared, focused, and relentless.",
+            "My time is valuable. I invest it wisely.",
+            "I don't ask for permission to be great. I just am.",
+            "Every day is a new opportunity to level up.",
+            "I think big, act bold, and win always.",
+            "My potential is unlimited. My grind is unmatched.",
+            "I build generational wealth starting today.",
+            "I am the main character in my success story.",
+            "Comfort zones are for the average. I am exceptional.",
+            "I see what others don't. I do what others won't.",
+            "My mindset is worth more than any bank account. But both are growing.",
+            "I am not playing the game. I am changing it.",
+            "Success is not an option. It's the only destination.",
+            "I am patient with results but relentless with my effort.",
+            "Ordinary people wish. Bosses work. I am a boss.",
+            "My legacy is being written with every move I make."
+        ];
+
+        function getDailyAffirmation() {
+            const today = new Date();
+            // Create a unique number based on year, month, and day
+            const dateNumber = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+            // Use the date to consistently select an affirmation
+            const index = dateNumber % affirmations.length;
+            return affirmations[index];
+        }
+
+        // Set the daily affirmation on page load
+        document.getElementById('daily-affirmation').textContent = getDailyAffirmation();
+
         render();
     </script>
 </body>
