@@ -164,7 +164,7 @@
             background: var(--card);
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        
+
         .tab {
             flex: 1;
             padding: 14px;
@@ -175,10 +175,455 @@
             border-bottom: 3px solid transparent;
             transition: all 0.2s;
         }
-        
+
         .tab.active {
             color: var(--accent);
             border-bottom-color: var(--accent);
+        }
+
+        /* Journal Section Styles */
+        .journal-container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px 16px;
+        }
+
+        .journal-header {
+            text-align: center;
+            margin-bottom: 24px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(78, 204, 163, 0.1) 0%, rgba(15, 52, 96, 0.3) 100%);
+            border-radius: 16px;
+            border: 1px solid rgba(78, 204, 163, 0.2);
+        }
+
+        .journal-date {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--success);
+            margin-bottom: 4px;
+        }
+
+        .journal-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .journal-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .journal-nav button {
+            background: var(--accent2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.2s;
+        }
+
+        .journal-nav button:hover {
+            background: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .journal-nav .today-btn {
+            width: auto;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Daily Summary Card */
+        .daily-summary {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .daily-summary h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--success);
+            display: block;
+        }
+
+        .stat-value.streak-hot {
+            color: #ff6b6b;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+        }
+
+        .completed-projects {
+            margin-top: 16px;
+        }
+
+        .completed-projects h4 {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .project-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(78, 204, 163, 0.15);
+            color: var(--success);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin: 0 6px 6px 0;
+        }
+
+        .project-chip::before {
+            content: '✓';
+            font-weight: bold;
+        }
+
+        .no-completions {
+            color: var(--text-dim);
+            font-style: italic;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Journal Entry Area */
+        .journal-entry-section {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .journal-entry-section h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .journal-prompts {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .journal-prompts h4 {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .prompt-list {
+            list-style: none;
+        }
+
+        .prompt-list li {
+            font-size: 0.85rem;
+            color: var(--text);
+            padding: 6px 0;
+            padding-left: 20px;
+            position: relative;
+            opacity: 0.8;
+        }
+
+        .prompt-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        .journal-textarea {
+            width: 100%;
+            min-height: 180px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 16px;
+            color: var(--text);
+            font-size: 1rem;
+            line-height: 1.6;
+            resize: vertical;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .journal-textarea:focus {
+            outline: none;
+            border-color: var(--success);
+            background: rgba(255,255,255,0.07);
+        }
+
+        .journal-textarea::placeholder {
+            color: var(--text-dim);
+            opacity: 0.6;
+        }
+
+        .journal-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+        }
+
+        .save-status {
+            font-size: 0.85rem;
+            color: var(--success);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .save-status.visible {
+            opacity: 1;
+        }
+
+        /* History View */
+        .journal-history {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .journal-history h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .history-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 16px;
+        }
+
+        .history-calendar-header {
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            padding: 8px 0;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .history-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .history-day:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .history-day.other-month {
+            opacity: 0.3;
+        }
+
+        .history-day.today {
+            background: var(--accent);
+            font-weight: 600;
+        }
+
+        .history-day.selected {
+            box-shadow: 0 0 0 2px var(--success);
+        }
+
+        .history-day.has-entry::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            width: 4px;
+            height: 4px;
+            background: var(--success);
+            border-radius: 50%;
+        }
+
+        .history-day.has-summary::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        /* Productivity Patterns */
+        .productivity-patterns {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .productivity-patterns h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pattern-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 150px;
+            padding: 20px 0;
+            gap: 8px;
+        }
+
+        .pattern-bar-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pattern-bar {
+            width: 100%;
+            max-width: 40px;
+            background: linear-gradient(to top, var(--success), rgba(78, 204, 163, 0.5));
+            border-radius: 6px 6px 0 0;
+            transition: all 0.3s;
+            min-height: 4px;
+        }
+
+        .pattern-bar:hover {
+            opacity: 0.8;
+        }
+
+        .pattern-bar.best {
+            background: linear-gradient(to top, var(--accent), rgba(233, 69, 96, 0.5));
+            box-shadow: 0 0 10px rgba(233, 69, 96, 0.3);
+        }
+
+        .pattern-label {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
+
+        .pattern-value {
+            font-size: 0.7rem;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .pattern-insight {
+            background: rgba(78, 204, 163, 0.1);
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 16px;
+            border-left: 3px solid var(--success);
+        }
+
+        .pattern-insight p {
+            font-size: 0.9rem;
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        .pattern-insight strong {
+            color: var(--success);
+        }
+
+        /* Past Entry View */
+        .past-entry {
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 16px;
+        }
+
+        .past-entry h4 {
+            font-size: 0.9rem;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .past-entry-content {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text);
+            white-space: pre-wrap;
+        }
+
+        .past-entry-empty {
+            color: var(--text-dim);
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
         }
         
         .view { display: none; }
@@ -868,6 +1313,66 @@
                 </div>
             </div>
             <div id="calendar-content"></div>
+        </div>
+    </div>
+
+    <div id="journal-view" class="view">
+        <div class="container" id="journal-container">
+            <!-- Mental Reps Section - Quick Daily Exercises -->
+            <div class="journal-section mental-reps">
+                <div class="section-header">
+                    <span class="section-icon">🧠</span>
+                    <div class="section-title">
+                        <h2>Mental Reps</h2>
+                        <p class="section-subtitle">Quick daily exercises to sharpen your thinking</p>
+                    </div>
+                </div>
+                <div class="mental-reps-cards" id="mental-reps-container">
+                    <!-- Mental reps injected by JS -->
+                </div>
+            </div>
+
+            <!-- Daily Analytical Prompts -->
+            <div class="journal-section daily-prompts">
+                <div class="section-header">
+                    <span class="section-icon">⚡</span>
+                    <div class="section-title">
+                        <h2>Daily Deep Dive</h2>
+                        <p class="section-subtitle">Think sharper. Don't just write—analyze.</p>
+                    </div>
+                </div>
+                <div class="prompts-list" id="daily-prompts-container">
+                    <!-- Prompts injected by JS -->
+                </div>
+            </div>
+
+            <!-- Weekly Analysis Section -->
+            <div class="journal-section weekly-analysis" id="weekly-analysis-section">
+                <div class="section-header">
+                    <span class="section-icon">📊</span>
+                    <div class="section-title">
+                        <h2>Weekly Analysis</h2>
+                        <p class="section-subtitle" id="weekly-analysis-subtitle">Available every Sunday</p>
+                    </div>
+                </div>
+                <div class="weekly-content" id="weekly-analysis-container">
+                    <!-- Weekly analysis injected by JS -->
+                </div>
+            </div>
+
+            <!-- Journal History -->
+            <div class="journal-section journal-history">
+                <div class="section-header">
+                    <span class="section-icon">📚</span>
+                    <div class="section-title">
+                        <h2>Your Entries</h2>
+                        <p class="section-subtitle">Track your thinking over time</p>
+                    </div>
+                </div>
+                <div class="entries-list" id="journal-entries-container">
+                    <!-- Entries injected by JS -->
+                </div>
+            </div>
         </div>
     </div>
     
@@ -1877,6 +2382,7 @@
 
         // Daily Affirmation System
         const affirmations = [
+            // Millionaire/Boss Mindset
             "I am a money magnet. Wealth flows to me effortlessly.",
             "I think like a CEO. I move like a boss.",
             "My ideas are worth millions. My execution is priceless.",
@@ -1911,7 +2417,28 @@
             "Success is not an option. It's the only destination.",
             "I am patient with results but relentless with my effort.",
             "Ordinary people wish. Bosses work. I am a boss.",
-            "My legacy is being written with every move I make."
+            "My legacy is being written with every move I make.",
+            // Higher Being / Philosopher-King Affirmations
+            "You're not building a business. You're building a legacy that outlives you.",
+            "Think in decades. Act in days.",
+            "Your children's children will inherit the systems you build today.",
+            "Money is a tool. Impact is the mission. Wisdom is the reward.",
+            "You're not competing with others. You're competing with who you were yesterday.",
+            "The obstacle is the way. Every setback is training.",
+            "Abundance isn't about having. It's about knowing you can create.",
+            "What would the wisest version of you do right now?",
+            "Your thoughts become your reality. Guard them.",
+            "Mastery requires boredom. Embrace the reps.",
+            "You're not chasing success. You're becoming the person success chases.",
+            "The universe rewards those who act despite fear.",
+            "Your potential is infinite. Your time is not. Choose wisely.",
+            "Discipline is freedom. Chaos is prison.",
+            "You are the ancestor your descendants will speak of.",
+            "Small minds discuss people. Great minds discuss ideas. Higher minds create realities.",
+            "Every decision either builds your empire or delays it.",
+            "The masses react. The elite anticipate. The transcendent create.",
+            "Your energy is your currency. Invest it wisely.",
+            "You came here to do something that's never been done. Act like it."
         ];
 
         function getDailyAffirmation() {
