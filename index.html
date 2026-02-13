@@ -717,7 +717,7 @@
             let history = JSON.parse(localStorage.getItem('moves-completion-history')) || {};
             const today = new Date().toISOString().split('T')[0];
 
-            // Count completed steps today
+            // Count completed steps today and track details
             let completedToday = 0;
             data.businesses.forEach(b => {
                 b.goals.forEach(g => {
@@ -726,7 +726,11 @@
                             // Track when step was completed (approximate based on history)
                             const stepKey = `${b.id}-${g.id}-${s.id}`;
                             if (!history[stepKey]) {
-                                history[stepKey] = today;
+                                history[stepKey] = {
+                                    date: today,
+                                    businessName: b.name,
+                                    goalName: g.name
+                                };
                                 completedToday++;
                             }
                         }
@@ -750,17 +754,30 @@
 
             localStorage.setItem('moves-completion-history', JSON.stringify(history));
 
-            // Count completions in the last 7 days
+            // Count completions in the last 7 days and group by business/goal
             const oneWeekAgo = new Date();
             oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
 
             let weeklyCompletions = 0;
-            Object.values(history).forEach(dateStr => {
+            const breakdown = {}; // { "Business Name": { "Goal Name": count } }
+
+            Object.values(history).forEach(entry => {
+                const dateStr = typeof entry === 'string' ? entry : entry.date;
                 const date = new Date(dateStr);
-                if (date >= oneWeekAgo) weeklyCompletions++;
+                if (date >= oneWeekAgo) {
+                    weeklyCompletions++;
+                    // Track breakdown if we have the new format
+                    if (typeof entry === 'object' && entry.businessName) {
+                        const biz = entry.businessName;
+                        const goal = entry.goalName;
+                        if (!breakdown[biz]) breakdown[biz] = {};
+                        if (!breakdown[biz][goal]) breakdown[biz][goal] = 0;
+                        breakdown[biz][goal]++;
+                    }
+                }
             });
 
-            return { today: completedToday, thisWeek: weeklyCompletions };
+            return { today: completedToday, thisWeek: weeklyCompletions, breakdown };
         }
 
         function getCompletionStreak() {
@@ -823,10 +840,39 @@
                 parts.push(`<span class="deadline">${deadline.title}</span> ${dayText}`);
             }
 
-            // Recent wins
+            // Recent wins with contextual breakdown
             const wins = getRecentWins();
             if (wins.thisWeek > 0) {
-                parts.push(`Completed <span class="highlight">${wins.thisWeek} steps</span> this week ${wins.thisWeek >= 5 ? '🔥' : ''}`);
+                const fireEmoji = wins.thisWeek >= 5 ? ' 🔥' : '';
+
+                // Build contextual summary: "3 in Laugh Therapy, 2 in Plot House"
+                const breakdownParts = [];
+                const bizNames = Object.keys(wins.breakdown);
+
+                if (bizNames.length === 0) {
+                    // Fallback to simple count if no breakdown data yet
+                    parts.push(`Completed <span class="highlight">${wins.thisWeek} steps</span> this week${fireEmoji}`);
+                } else if (bizNames.length === 1) {
+                    // Single business - show business name and goal breakdown
+                    const bizName = bizNames[0];
+                    const goals = wins.breakdown[bizName];
+                    const goalEntries = Object.entries(goals);
+                    const bizTotal = goalEntries.reduce((sum, [, count]) => sum + count, 0);
+
+                    if (goalEntries.length === 1) {
+                        parts.push(`This week: <span class="highlight">${bizTotal} in ${bizName}</span> (${goalEntries[0][0]})${fireEmoji}`);
+                    } else {
+                        parts.push(`This week: <span class="highlight">${bizTotal} in ${bizName}</span>${fireEmoji}`);
+                    }
+                } else {
+                    // Multiple businesses - show count per business
+                    const breakdownText = bizNames.map(biz => {
+                        const goals = wins.breakdown[biz];
+                        const bizTotal = Object.values(goals).reduce((sum, count) => sum + count, 0);
+                        return `${bizTotal} in ${biz}`;
+                    }).join(', ');
+                    parts.push(`This week: <span class="highlight">${breakdownText}</span>${fireEmoji}`);
+                }
             }
 
             // Streak
