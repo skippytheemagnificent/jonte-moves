@@ -818,6 +818,7 @@
     <div class="tabs">
         <div class="tab active" onclick="switchTab('tasks')">Tasks</div>
         <div class="tab" onclick="switchTab('calendar')">Calendar</div>
+        <div class="tab" onclick="switchTab('journal')">Journal</div>
     </div>
     
     <div id="tasks-view" class="view active">
@@ -929,7 +930,250 @@
         function save() {
             localStorage.setItem('moves-data', JSON.stringify(data));
             // Refresh direction message without restarting the flip interval
-            document.getElementById('direction-message').innerHTML = getDirectionMessage();
+            const directionEl = document.getElementById('direction-message');
+            if (directionEl) directionEl.innerHTML = getDirectionMessage();
+            renderFocus();
+        }
+
+        // Today's Focus Section Logic
+        let focusCollapsed = localStorage.getItem('focus-collapsed') === 'true';
+
+        function toggleFocus() {
+            focusCollapsed = !focusCollapsed;
+            localStorage.setItem('focus-collapsed', focusCollapsed);
+            const header = document.querySelector('.focus-header');
+            const content = document.getElementById('focus-content');
+            const toggle = document.getElementById('focus-toggle');
+            if (header) header.classList.toggle('collapsed', focusCollapsed);
+            if (content) content.classList.toggle('collapsed', focusCollapsed);
+            if (toggle) toggle.textContent = focusCollapsed ? '▶' : '▼';
+        }
+
+        function getTodayString() {
+            return new Date().toISOString().split('T')[0];
+        }
+
+        function getTomorrowString() {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            return tomorrow.toISOString().split('T')[0];
+        }
+
+        function getStalledGoals() {
+            const history = JSON.parse(localStorage.getItem('moves-completion-history')) || {};
+            const stalled = [];
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+            data.businesses.forEach(b => {
+                b.goals.forEach(g => {
+                    if (g.steps.length === 0) return;
+                    
+                    // Check if any steps are incomplete
+                    const incompleteSteps = g.steps.filter(s => !s.done);
+                    if (incompleteSteps.length === 0) return;
+
+                    // Find last activity on this goal
+                    let lastActivity = null;
+                    g.steps.forEach(s => {
+                        const stepKey = `${b.id}-${g.id}-${s.id}`;
+                        const entry = history[stepKey];
+                        if (entry) {
+                            const date = new Date(typeof entry === 'string' ? entry : entry.date);
+                            if (!lastActivity || date > lastActivity) {
+                                lastActivity = date;
+                            }
+                        }
+                    });
+
+                    // If no activity or last activity was 7+ days ago
+                    if (!lastActivity || lastActivity < sevenDaysAgo) {
+                        const daysSince = lastActivity 
+                            ? Math.floor((new Date() - lastActivity) / (1000 * 60 * 60 * 24))
+                            : 30; // Default to 30 if never touched
+                        stalled.push({
+                            business: b,
+                            goal: g,
+                            daysStalled: daysSince,
+                            incompleteSteps: incompleteSteps
+                        });
+                    }
+                });
+            });
+
+            return stalled;
+        }
+
+        function getPriorityItems() {
+            const today = getTodayString();
+            const tomorrow = getTomorrowString();
+            const todayDate = new Date();
+            todayDate.setHours(0, 0, 0, 0);
+
+            const priorities = [];
+
+            // 1. Overdue items from events
+            data.events.forEach(e => {
+                const eventDate = new Date(e.date + 'T12:00:00');
+                if (eventDate < todayDate) {
+                    const daysOverdue = Math.floor((todayDate - eventDate) / (1000 * 60 * 60 * 24));
+                    priorities.push({
+                        type: 'event',
+                        name: e.title,
+                        project: 'Calendar Event',
+                        reason: 'overdue',
+                        reasonText: `Overdue by ${daysOverdue} day${daysOverdue > 1 ? 's' : ''}`,
+                        icon: '🔥',
+                        priority: 1
+                    });
+                }
+            });
+
+            // 2. Due today/tomorrow from events
+            data.events.forEach(e => {
+                const eventDate = new Date(e.date + 'T12:00:00');
+                const daysDiff = Math.ceil((eventDate - todayDate) / (1000 * 60 * 60 * 24));
+                
+                if (daysDiff === 0 && !priorities.find(p => p.name === e.title && p.type === 'event')) {
+                    priorities.push({
+                        type: 'event',
+                        name: e.title,
+                        project: 'Calendar Event',
+                        reason: 'urgent',
+                        reasonText: 'Due today',
+                        icon: '⏰',
+                        priority: 2
+                    });
+                } else if (daysDiff === 1 && !priorities.find(p => p.name === e.title && p.type === 'event')) {
+                    priorities.push({
+                        type: 'event',
+                        name: e.title,
+                        project: 'Calendar Event',
+                        reason: 'urgent',
+                        reasonText: 'Due tomorrow',
+                        icon: '⚠️',
+                        priority: 2
+                    });
+                }
+            });
+
+            // 3. Blocking items - first incomplete step in goals with many steps
+            data.businesses.forEach(b => {
+                b.goals.forEach(g => {
+                    if (g.steps.length >= 3) {
+                        const firstIncomplete = g.steps.find(s => !s.done);
+                        if (firstIncomplete) {
+                            // Check if not already added
+                            const alreadyAdded = priorities.find(p => 
+                                p.type === 'step' && p.stepId === firstIncomplete.id
+                            );
+                            if (!alreadyAdded) {
+                                priorities.push({
+                                    type: 'step',
+                                    stepId: firstIncomplete.id,
+                                    name: firstIncomplete.text,
+                                    project: `${b.name} → ${g.name}`,
+                                    reason: 'blocking',
+                                    reasonText: `Blocking ${g.steps.filter(s => !s.done).length} other steps`,
+                                    icon: '🚧',
+                                    priority: 3
+                                });
+                            }
+                        }
+                    }
+                });
+            });
+
+            // 4. Stalled high-value goals
+            const stalledGoals = getStalledGoals();
+            stalledGoals.forEach(sg => {
+                const firstIncomplete = sg.goal.steps.find(s => !s.done);
+                if (firstIncomplete) {
+                    const alreadyAdded = priorities.find(p => 
+                        p.type === 'step' && p.stepId === firstIncomplete.id
+                    );
+                    if (!alreadyAdded) {
+                        priorities.push({
+                            type: 'step',
+                            stepId: firstIncomplete.id,
+                            name: firstIncomplete.text,
+                            project: `${sg.business.name} → ${sg.goal.name}`,
+                            reason: 'stalled',
+                            reasonText: `Stalled ${sg.daysStalled} days - jump back in`,
+                            icon: '💤',
+                            priority: 4
+                        });
+                    }
+                }
+            });
+
+            // 5. Quick wins - incomplete steps from goals with few remaining steps
+            data.businesses.forEach(b => {
+                b.goals.forEach(g => {
+                    const incomplete = g.steps.filter(s => !s.done);
+                    if (incomplete.length > 0 && incomplete.length <= 2) {
+                        const step = incomplete[0];
+                        const alreadyAdded = priorities.find(p => 
+                            p.type === 'step' && p.stepId === step.id
+                        );
+                        if (!alreadyAdded) {
+                            priorities.push({
+                                type: 'step',
+                                stepId: step.id,
+                                name: step.text,
+                                project: `${b.name} → ${g.name}`,
+                                reason: 'quickwin',
+                                reasonText: 'Quick win - only ' + incomplete.length + ' step' + (incomplete.length > 1 ? 's' : '') + ' left',
+                                icon: '⚡',
+                                priority: 5
+                            });
+                        }
+                    }
+                });
+            });
+
+            // Sort by priority and return top 3
+            return priorities.sort((a, b) => a.priority - b.priority).slice(0, 3);
+        }
+
+        function renderFocus() {
+            const focusList = document.getElementById('focus-list');
+            const header = document.querySelector('.focus-header');
+            const content = document.getElementById('focus-content');
+            const toggle = document.getElementById('focus-toggle');
+            
+            if (!focusList) return;
+
+            // Apply collapsed state
+            if (header) header.classList.toggle('collapsed', focusCollapsed);
+            if (content) content.classList.toggle('collapsed', focusCollapsed);
+            if (toggle) toggle.textContent = focusCollapsed ? '▶' : '▼';
+
+            const priorities = getPriorityItems();
+
+            if (priorities.length === 0) {
+                focusList.innerHTML = `
+                    <div class="focus-empty">
+                        <span class="focus-empty-icon">🎯</span>
+                        No fires today. Pick your highest-leverage goal and attack.
+                    </div>
+                `;
+                return;
+            }
+
+            focusList.innerHTML = priorities.map((item, index) => `
+                <div class="focus-item">
+                    <div class="focus-number">${index + 1}</div>
+                    <div class="focus-details">
+                        <div class="focus-task">${item.name}</div>
+                        <div class="focus-project">${item.project}</div>
+                        <div class="focus-reason ${item.reason}">
+                            <span class="focus-reason-icon">${item.icon}</span>
+                            ${item.reasonText}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
         }
 
         // Coach Section - Motivation & Direction Flip
@@ -1684,6 +1928,7 @@
 
         render();
         renderSummary();
+        renderFocus();
     </script>
 </body>
 </html>
